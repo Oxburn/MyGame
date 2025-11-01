@@ -11,6 +11,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/raylib_game.dir/src/Level1_Screen2.cpp.obj.d"
   "CMakeFiles/raylib_game.dir/src/OptionsScreen.cpp.obj"
   "CMakeFiles/raylib_game.dir/src/OptionsScreen.cpp.obj.d"
+  "CMakeFiles/raylib_game.dir/src/PointsHero.cpp.obj"
+  "CMakeFiles/raylib_game.dir/src/PointsHero.cpp.obj.d"
   "CMakeFiles/raylib_game.dir/src/RenderUtils.cpp.obj"
   "CMakeFiles/raylib_game.dir/src/RenderUtils.cpp.obj.d"
   "CMakeFiles/raylib_game.dir/src/StartScreen.cpp.obj"

@@ -23,6 +23,7 @@ extern int GLOBAL_SOUND_CURSOR_POS;
 extern int GLOBAL_MUSIC_CURSOR_POS;
 extern int GLOBAL_PAUSE_CURSOR_POS;
 
+extern float GLOBAL_HERO_RADIUS;    // Rayon de base du héros
 extern Vector2 GLOBAL_HERO_POS;
 extern Vector2 GLOBAL_HERO_MOVE;
 extern Vector2 GLOBAL_HERO_VELOCITY;

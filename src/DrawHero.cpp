@@ -2,6 +2,7 @@
 #include "raymath.h"
 #include "Variables.h"
 #include "RenderUtils.h"
+#include "PointsHero.h"
 #include <vector>
 #include <cmath>
 #include <algorithm> 
@@ -10,8 +11,7 @@
 
 
 // Paramètres
-float GLOBAL_HERO_RADIUS = 2.0f;    // Rayon de base du héros
-int GLOBAL_HERO_ACCURACY = 30;      // Finesse de représentation du héros
+
 float GLOBAL_MAX_SPEED = 3.0f;
 float GLOBAL_HERO_ACCELERATION = 0.5f;
 float GLOBAL_HERO_CRUSH = 3.0f;      // Ecrasement du héros : 1.0f->Très aplati, 5.0.f -> Peu aplati
@@ -55,30 +55,22 @@ float IntersectSegmentsDistance(Vector2 p1, Vector2 p2, Vector2 p3, Vector2 p4)
 std::vector<Vector2> GetProximity(const std::vector<POLYLINE>& polylines)
 {
     std::vector<Vector2> results;
-    
-    for (int i = 0; i < GLOBAL_HERO_ACCURACY; i++)
+
+    std::vector<std::pair<float, Vector2>> heroPoints = PointsHero();
+    for (const auto& heroPoint : heroPoints)
     {
-        float angle = (2.0f * PI * i + GLOBAL_HERO_ROTATION) / GLOBAL_HERO_ACCURACY;
-
         Vector2 A = GLOBAL_HERO_POS;
-        // B_unscaled = point sur le cercle original
-        Vector2 B_unscaled = {
-            GLOBAL_HERO_POS.x + GLOBAL_HERO_RADIUS * cosf(angle),
-            GLOBAL_HERO_POS.y + GLOBAL_HERO_RADIUS * sinf(angle)
-        };
+        Vector2 B = heroPoint.second;
+        float angle = heroPoint.first;
 
-        // B_scaled = application du scaleX (autour du centre)
-        Vector2 B = B_unscaled;
-        B.x = GLOBAL_HERO_POS.x + (B_unscaled.x - GLOBAL_HERO_POS.x) / WINDOW_RATIO;
-
-        // longueur maximale possible dans l'espace compressé
+        // Longueur maximale possible
         float maxScaledLen = sqrtf((B.x - A.x)*(B.x - A.x) + (B.y - A.y)*(B.y - A.y));
         // fallback si dégénéré
         if (maxScaledLen <= 1e-6f) {
             continue;
         }
-
-        float minDist = GLOBAL_HERO_RADIUS; // distance en espace non-scalé (radial)
+        // Distance en espace non-scalé (radial)
+        float minDist = GLOBAL_HERO_RADIUS; 
 
         for (const auto& poly : polylines)
         {

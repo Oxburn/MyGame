@@ -1,0 +1,198 @@
+// point_physics.cpp
+// Example: simple point-mass physics visualization with raylib
+// Compile (Linux/macOS): g++ point_physics.cpp -o point_physics -lraylib -lm -lpthread -ldl
+// Compile (Windows MSYS with raylib): g++ point_physics.cpp -o point_physics.exe -lraylib
+
+#include "raylib.h"
+#include <cmath>
+#include <string>
+
+// Small 2D vector utilities (for clarity)
+struct Vec2 {
+    float x, y;
+    Vec2(): x(0), y(0) {}
+    Vec2(float _x, float _y): x(_x), y(_y) {}
+    Vec2 operator+(const Vec2 &o) const { return Vec2(x+o.x, y+o.y); }
+    Vec2 operator-(const Vec2 &o) const { return Vec2(x-o.x, y-o.y); }
+    Vec2 operator*(float s) const { return Vec2(x*s, y*s); }
+    Vec2 operator/(float s) const { return Vec2(x/s, y/s); }
+    Vec2& operator+=(const Vec2 &o) { x+=o.x; y+=o.y; return *this; }
+    float Len() const { return sqrtf(x*x + y*y); }
+    Vec2 Normalized() const { float l = Len(); return (l>0)? (*this)/l : Vec2(0,0); }
+};
+
+// Point-mass (particle)
+struct Particle {
+    Vec2 pos;
+    Vec2 vel;
+    Vec2 forceAccum;
+    float mass;
+    float radius;
+
+    Particle() : pos(0,0), vel(0,0), forceAccum(0,0), mass(1.0f), radius(10.0f) {}
+
+    void ClearForces() { forceAccum = Vec2(0,0); }
+    void AddForce(const Vec2 &f) { forceAccum += f; }
+};
+
+int main() {
+    const int screenW = 1000;
+    const int screenH = 700;
+    InitWindow(screenW, screenH, "Point-mass physics - Raylib example");
+    SetTargetFPS(60);
+
+    Particle p;
+    p.pos = Vec2(screenW*0.5f, screenH*0.25f);
+    p.vel = Vec2(0, 0);
+    p.mass = 2.0f;
+    p.radius = 12.0f;
+
+    // Simulation parameters
+    Vec2 gravity = Vec2(0, 980.0f); // px/s^2 (approx real-feel: 980 instead of 9.81 because px)
+    float floorY = screenH - 80.0f;
+    float restitution = 0.6f;       // bounciness on collision with floor
+    bool gravityOn = true;
+    bool paused = false;
+
+    // Mouse interaction
+    bool dragging = false;
+    Vec2 dragStart;
+    Vec2 dragEnd;
+
+    double previousTime = GetTime();
+
+    while (!WindowShouldClose()) {
+        // Time step (fixed-ish, limited)
+        double currentTime = GetTime();
+        float dt = (float)(currentTime - previousTime);
+        if (dt > 0.05f) dt = 0.05f; // clamp large dt
+        previousTime = currentTime;
+
+        // Input
+        if (IsKeyPressed(KEY_SPACE)) {
+            // reset
+            p.pos = Vec2(screenW*0.5f, screenH*0.25f);
+            p.vel = Vec2(0,0);
+            p.ClearForces();
+        }
+        if (IsKeyPressed(KEY_G)) gravityOn = !gravityOn;
+        if (IsKeyPressed(KEY_P)) paused = !paused;
+
+        // Mouse drag to apply impulse
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+            dragging = true;
+            dragStart = Vec2((float)GetMouseX(), (float)GetMouseY());
+            dragEnd = dragStart;
+        }
+        if (dragging) {
+            dragEnd = Vec2((float)GetMouseX(), (float)GetMouseY());
+            if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
+                dragging = false;
+                // Apply impulse proportional to drag vector
+                Vec2 impulse = (dragStart - dragEnd) * 6.0f; // tune multiplier
+                // Impulse -> change in velocity: dv = impulse / mass
+                p.vel += impulse / p.mass;
+            }
+        }
+
+        // Physics step
+        if (!paused) {
+            p.ClearForces();
+
+            // Gravity
+            if (gravityOn) {
+                p.AddForce(gravity * p.mass); // F = m * g
+            }
+
+            // Simple linear drag (damping): F_drag = -k * v
+            // We'll simulate as force, with k tuned relative to mass
+            float k = 3.0f; // drag coefficient (higher = more damping)
+            Vec2 dragForce = p.vel * (-k);
+            p.AddForce(dragForce);
+
+            // Acceleration
+            Vec2 accel = p.forceAccum / p.mass;
+
+            // Semi-implicit Euler integration (stable)
+            p.vel += accel * dt;
+            p.pos += p.vel * dt;
+
+            // Floor collision (simple)
+            if (p.pos.y + p.radius > floorY) {
+                p.pos.y = floorY - p.radius;
+                if (p.vel.y > 0) {
+                    p.vel.y = -p.vel.y * restitution;
+                    // small friction on floor
+                    p.vel.x *= 0.98f;
+                }
+                // if very small, zero it
+                if (fabs(p.vel.y) < 1.0f) p.vel.y = 0;
+            }
+
+            // Simple side walls
+            if (p.pos.x - p.radius < 0) {
+                p.pos.x = p.radius;
+                if (p.vel.x < 0) p.vel.x = -p.vel.x * restitution;
+            } else if (p.pos.x + p.radius > screenW) {
+                p.pos.x = screenW - p.radius;
+                if (p.vel.x > 0) p.vel.x = -p.vel.x * restitution;
+            }
+        }
+
+        // --- Rendering ---
+        BeginDrawing();
+            ClearBackground(RAYWHITE);
+
+            // Draw floor
+            DrawRectangle(0, (int)floorY, screenW, screenH - (int)floorY, Fade(DARKGRAY, 0.9f));
+            DrawLine(0, (int)floorY, screenW, (int)floorY, BLACK);
+
+            // Draw particle
+            DrawCircleV({p.pos.x, p.pos.y}, p.radius, MAROON);
+            // Draw center cross
+            DrawLine((int)(p.pos.x-6), (int)p.pos.y, (int)(p.pos.x+6), (int)p.pos.y, BLACK);
+            DrawLine((int)p.pos.x, (int)(p.pos.y-6), (int)p.pos.x, (int)(p.pos.y+6), BLACK);
+
+            // Velocity vector
+            Vec2 velEnd = p.pos + p.vel * 0.05f; // scale for visualization
+            DrawLine((int)p.pos.x, (int)p.pos.y, (int)velEnd.x, (int)velEnd.y, BLUE);
+            DrawText("v", (int)velEnd.x+4, (int)velEnd.y+4, 12, BLUE);
+
+            // Force vector (net force)
+            Vec2 netForceEnd = p.pos + p.forceAccum * 0.02f;
+            DrawLine((int)p.pos.x, (int)p.pos.y, (int)netForceEnd.x, (int)netForceEnd.y, RED);
+            DrawText("F", (int)netForceEnd.x+4, (int)netForceEnd.y+4, 12, RED);
+
+            // Draw dragging arrow if any
+            if (dragging) {
+                DrawLine((int)dragStart.x, (int)dragStart.y, (int)dragEnd.x, (int)dragEnd.y, DARKBLUE);
+                // arrow head
+                Vector2 d = {(float)(dragEnd.x-dragStart.x), (float)(dragEnd.y-dragStart.y)};
+                float len = sqrtf(d.x*d.x + d.y*d.y);
+                if (len > 0.1f) {
+                    Vector2 n = {d.x/len, d.y/len};
+                    Vector2 left = { dragEnd.x + (-n.x*10 - n.y*6), dragEnd.y + (-n.y*10 + n.x*6) };
+                    Vector2 right= { dragEnd.x + (-n.x*10 + n.y*6), dragEnd.y + (-n.y*10 - n.x*6) };
+                    DrawTriangle({dragEnd.x, dragEnd.y}, left, right, DARKBLUE);
+                }
+            }
+
+            // UI text
+            std::string status = "SPACE: reset  |  G: toggle gravity  |  P: pause  |  Click+drag: impulse";
+            DrawText(status.c_str(), 10, 10, 14, GRAY);
+            std::string s1 = "Mass: " + std::to_string(p.mass) + " kg  |  Gravity: " + (gravityOn? "ON":"OFF");
+            DrawText(s1.c_str(), 10, 30, 14, GRAY);
+            std::string s2 = "Pos: (" + std::to_string((int)p.pos.x) + ", " + std::to_string((int)p.pos.y) + ")"
+                             + "  Vel: (" + std::to_string((int)p.vel.x) + ", " + std::to_string((int)p.vel.y) + ")";
+            DrawText(s2.c_str(), 10, 50, 14, GRAY);
+
+            if (paused) {
+                DrawText("PAUSED", screenW - 120, 10, 24, RED);
+            }
+
+        EndDrawing();
+    }
+
+    CloseWindow();
+    return 0;
+}

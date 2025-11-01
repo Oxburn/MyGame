@@ -126,6 +126,7 @@ CMakeFiles/raylib_game.dir/src/DrawHero.cpp.obj: \
  C:/msys64/mingw64/include/c++/15.2.0/bits/stl_bvector.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/vector.tcc \
  C:/Users/bruno.richardon/Desktop/Projets/MyGame/include/RenderUtils.h \
+ C:/Users/bruno.richardon/Desktop/Projets/MyGame/include/PointsHero.h \
  C:/msys64/mingw64/include/c++/15.2.0/algorithm \
  C:/msys64/mingw64/include/c++/15.2.0/bits/stl_algo.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/algorithmfwd.h \
