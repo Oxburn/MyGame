@@ -6,6 +6,8 @@
 #include "Level1_Screen1.h"
 #include "Level1_Screen2.h"
 
+#include "rlgl.h"
+
 void Window() {
 
     // ---- Initialisation de la fenêtre ----
@@ -40,13 +42,18 @@ void Window() {
 
     // ---- Chargement de la police ----
 
+    int fontCoef = 1;
+    if (!(rlGetVersion() > 2))
+    {
+        fontCoef = 3;
+    }
     int codepoints[CODEPOINT_COUNT];
     for (int i = 0; i < CODEPOINT_COUNT; i++) codepoints[i] = 32 + i;
     codepoints[CODEPOINT_COUNT - 1] = 0x27A4; // ➤
-    GLOBAL_FONT_SIZE = (int)(windowHeight * FONT_SIZE_RATIO);
+    GLOBAL_FONT_SIZE = (int)(fontCoef * windowHeight * FONT_SIZE_RATIO);
     GLOBAL_TEXT_SPACING = (int)(GLOBAL_FONT_SIZE * 0.05);
     GLOBAL_FONT = LoadFontEx(FONT_FILE, GLOBAL_FONT_SIZE, codepoints, CODEPOINT_COUNT);
-
+    
 
     // ---- Comportement dynamique de la fenêtre ----
 

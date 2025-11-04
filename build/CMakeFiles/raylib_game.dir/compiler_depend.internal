@@ -1666,6 +1666,7 @@ CMakeFiles/raylib_game.dir/src/Window.cpp.obj
  C:/msys64/mingw64/include/locale.h
  C:/msys64/mingw64/include/malloc.h
  C:/msys64/mingw64/include/raylib.h
+ C:/msys64/mingw64/include/rlgl.h
  C:/msys64/mingw64/include/sdks/_mingw_ddk.h
  C:/msys64/mingw64/include/sec_api/stdio_s.h
  C:/msys64/mingw64/include/sec_api/stdlib_s.h

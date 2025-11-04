@@ -1655,6 +1655,7 @@ CMakeFiles/raylib_game.dir/src/Window.cpp.obj: C:/Users/bruno.richardon/Desktop/
   C:/msys64/mingw64/include/locale.h \
   C:/msys64/mingw64/include/malloc.h \
   C:/msys64/mingw64/include/raylib.h \
+  C:/msys64/mingw64/include/rlgl.h \
   C:/msys64/mingw64/include/sdks/_mingw_ddk.h \
   C:/msys64/mingw64/include/sec_api/stdio_s.h \
   C:/msys64/mingw64/include/sec_api/stdlib_s.h \
@@ -2526,6 +2527,8 @@ C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/mm_malloc.h:
 C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/movdirintrin.h:
 
 C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/movrsintrin.h:
+
+C:/msys64/mingw64/include/rlgl.h:
 
 C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/mwaitintrin.h:
 

@@ -111,4 +111,5 @@ CMakeFiles/raylib_game.dir/src/Window.cpp.obj: \
  C:/Users/bruno.richardon/Desktop/Projets/MyGame/include/StartScreen.h \
  C:/Users/bruno.richardon/Desktop/Projets/MyGame/include/OptionsScreen.h \
  C:/Users/bruno.richardon/Desktop/Projets/MyGame/include/Level1_Screen1.h \
- C:/Users/bruno.richardon/Desktop/Projets/MyGame/include/Level1_Screen2.h
+ C:/Users/bruno.richardon/Desktop/Projets/MyGame/include/Level1_Screen2.h \
+ C:/msys64/mingw64/include/rlgl.h
