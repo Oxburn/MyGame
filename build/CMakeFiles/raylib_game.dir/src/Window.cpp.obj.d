@@ -8,6 +8,7 @@ CMakeFiles/raylib_game.dir/src/Window.cpp.obj: \
  C:/msys64/mingw64/include/_mingw_mac.h \
  C:/msys64/mingw64/include/_mingw_secapi.h \
  C:/msys64/mingw64/include/sdks/_mingw_ddk.h \
+ C:/msys64/mingw64/include/rlgl.h \
  C:/Users/bruno.richardon/Desktop/Projets/MyGame/include/Variables.h \
  C:/msys64/mingw64/include/c++/15.2.0/string \
  C:/msys64/mingw64/include/c++/15.2.0/bits/requires_hosted.h \
@@ -111,5 +112,4 @@ CMakeFiles/raylib_game.dir/src/Window.cpp.obj: \
  C:/Users/bruno.richardon/Desktop/Projets/MyGame/include/StartScreen.h \
  C:/Users/bruno.richardon/Desktop/Projets/MyGame/include/OptionsScreen.h \
  C:/Users/bruno.richardon/Desktop/Projets/MyGame/include/Level1_Screen1.h \
- C:/Users/bruno.richardon/Desktop/Projets/MyGame/include/Level1_Screen2.h \
- C:/msys64/mingw64/include/rlgl.h
+ C:/Users/bruno.richardon/Desktop/Projets/MyGame/include/Level1_Screen2.h

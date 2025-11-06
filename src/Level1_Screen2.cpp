@@ -1,7 +1,7 @@
 #include "raylib.h"
 #include "Variables.h"
 #include "RenderUtils.h"
-#include "DrawPolyline.h"
+#include "DrawLevel.h"
 #include "DrawHero.h"
 #include <vector>
 
@@ -55,11 +55,11 @@ void Level1_Screen2() {
     // Regroupement des listes
 
     std::vector<POLYLINE> polylines = {
-        { moss1Pts, MOSS_THICKNESS, MOSS_COLOR },
-        { grassPts, GRASS_THICKNESS, GRASS_COLOR },
-        { moss2Pts, MOSS_THICKNESS, MOSS_COLOR },
-        { moss3Pts, MOSS_THICKNESS, MOSS_COLOR },
-        { moss4Pts, MOSS_THICKNESS, MOSS_COLOR }
+        { moss1Pts, MOSS_THICKNESS, MOSS_COLOR, DIRT_COLOR },
+        { grassPts, GRASS_THICKNESS, GRASS_COLOR, DIRT_COLOR },
+        { moss2Pts, MOSS_THICKNESS, MOSS_COLOR, DIRT_COLOR },
+        { moss3Pts, MOSS_THICKNESS, MOSS_COLOR, DIRT_COLOR },
+        { moss4Pts, MOSS_THICKNESS, MOSS_COLOR, DIRT_COLOR }
     };
 
 
@@ -74,7 +74,7 @@ void Level1_Screen2() {
 
         ClearBackground(BACKGROUND_COLOR);
         for (const auto& poly : polylines) {
-            DrawPolyline(poly.points, poly.thickness, poly.color, dims);
+            DrawLevel(poly.points, poly.thickness, poly.boundaryColor, poly.surfaceColor, dims);
         }
         DrawHero(polylines, dims);
 

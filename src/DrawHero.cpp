@@ -11,15 +11,11 @@
 
 
 // Paramètres
-
 float GLOBAL_MAX_SPEED = 3.0f;
 float GLOBAL_HERO_ACCELERATION = 0.5f;
-float GLOBAL_HERO_CRUSH = 3.0f;      // Ecrasement du héros : 1.0f->Très aplati, 5.0.f -> Peu aplati
-//float GLOBAL_MAX_JUMP = 15.0f;
-//Vector2 GLOBAL_GRAVITY_FORCE = {0.0f, 9.8f};
+float GLOBAL_HERO_BOUNCE = 1.0f;      // Rebond du héros
 Vector2 GLOBAL_GRAVITY_FORCE = {0.0f, 7.0f};
-
-bool GLOBAL_BOTTOM_CONTACT = false;
+float GLOBAL_JUMP_POWER = 15.0f; // 8.0f (un peu plus que la gravité) -> Saut minimal
 
 float IntersectSegmentsDistance(Vector2 p1, Vector2 p2, Vector2 p3, Vector2 p4)
 {
@@ -49,8 +45,6 @@ float IntersectSegmentsDistance(Vector2 p1, Vector2 p2, Vector2 p3, Vector2 p4)
 
     return GLOBAL_HERO_RADIUS; // pas d’intersection
 }
-
-
 
 std::vector<Vector2> GetProximity(const std::vector<POLYLINE>& polylines)
 {
@@ -87,7 +81,9 @@ std::vector<Vector2> GetProximity(const std::vector<POLYLINE>& polylines)
 
                     float realDist = t * GLOBAL_HERO_RADIUS; // ramène dans la métrique d'origine
                     if (realDist < minDist)
+                    {
                         minDist = realDist;
+                    }
                 }
             }
         }
@@ -97,7 +93,6 @@ std::vector<Vector2> GetProximity(const std::vector<POLYLINE>& polylines)
 
     return results;
 }
-
 
 Vector2 ComputeForces(std::vector<Vector2> proximityData, RenderDims dims)
 {
@@ -112,7 +107,63 @@ Vector2 ComputeForces(std::vector<Vector2> proximityData, RenderDims dims)
     std::vector<Vector2> forces = {GLOBAL_GRAVITY_FORCE};
 
 
-    // ---- Force de déplacement ----
+    // ---- Forces de réaction ----
+
+    for (size_t i = 0; i < proximityData.size(); i++)
+    {
+        float angle = proximityData[i].x;
+        float distance = proximityData[i].y;
+
+        if (distance < GLOBAL_HERO_RADIUS) {
+
+            float penetration = GLOBAL_HERO_RADIUS - distance;
+            float totalForce = std::min(GLOBAL_HERO_BOUNCE * penetration, GLOBAL_MAX_SPEED);
+
+            float reactionForceX = totalForce * cos(angle + PI);
+            float reactionForceY = totalForce * sin(angle + PI);
+            Vector2 reactionForce = {reactionForceX, reactionForceY};
+            forces.push_back(reactionForce);
+        }
+    }
+
+
+    // ---- Forces du saut (proportionnelles aux Forces de réaction !) ----
+
+    if (IsKeyPressed(KEY_S))
+    {
+        GLOBAL_JUMP_CLICK_START_TIME = GetTime();
+        GLOBAL_JUMP_IS_PRESSED = true;
+    }
+    if (GLOBAL_JUMP_IS_PRESSED && IsKeyDown(KEY_S))
+    {
+        double duration = GetTime() - GLOBAL_JUMP_CLICK_START_TIME;
+        duration = std::min(duration, GLOBAL_JUMP_MAX_TIME);
+
+        float sumY = -1.0f;
+        std::vector<Vector2> newForces;
+        for (size_t i = 1; i < forces.size() - 1; i++)
+        {
+            Vector2 reactionForce = forces[i];
+            newForces.push_back(reactionForce);
+            sumY += reactionForce.y;
+        }
+
+        float jumpCoef = GLOBAL_JUMP_POWER * GLOBAL_JUMP_POWER / (std::pow(duration + 1.0f, 10.0f)) / -sumY;
+        jumpCoef = std::min(jumpCoef, GLOBAL_JUMP_POWER);
+
+        for (const auto& newForce: newForces)
+        {
+            Vector2 jumpForce =
+            {
+                (float)(jumpCoef * newForce.x),
+                (float)(jumpCoef * newForce.y)
+            };
+            forces.push_back(jumpForce);
+        }
+    }
+    
+
+    // ---- Forces de déplacement ----
 
     if (IsKeyDown(KEY_RIGHT) && GLOBAL_HERO_MOVE.x < GLOBAL_MAX_SPEED)
     {
@@ -131,39 +182,16 @@ Vector2 ComputeForces(std::vector<Vector2> proximityData, RenderDims dims)
     {
         GLOBAL_HERO_MOVE.y += GLOBAL_HERO_ACCELERATION;
     }
-    if (IsKeyPressed(KEY_UP))
+    if (IsKeyPressed(KEY_UP) && GLOBAL_HERO_MOVE.y > -GLOBAL_MAX_SPEED)
     {
-        GLOBAL_HERO_VELOCITY.y = -10.0f;
-        if (IsKeyDown(KEY_UP))
-        {
-            GLOBAL_HERO_VELOCITY.y -= 1.0f;
-        }
+        GLOBAL_HERO_MOVE.y -= GLOBAL_HERO_ACCELERATION;
     }
     if (IsKeyUp(KEY_UP) && IsKeyUp(KEY_DOWN))
     {
         GLOBAL_HERO_MOVE.y = 0.0f;
     }
+
     forces.push_back(GLOBAL_HERO_MOVE);
-
-
-    // ---- Forces de réaction ----
-
-    for (size_t i = 0; i < proximityData.size(); i++)
-    {
-        float angle = proximityData[i].x;
-        float distance = proximityData[i].y;
-
-        if (distance < GLOBAL_HERO_RADIUS) {
-
-            float penetration = GLOBAL_HERO_RADIUS - distance;
-            float totalForce = std::min(GLOBAL_HERO_CRUSH * penetration, GLOBAL_MAX_SPEED);
-
-            float reactionForceX = totalForce * cos(angle + PI);
-            float reactionForceY = totalForce * sin(angle + PI);
-            Vector2 reactionForce = {reactionForceX, reactionForceY};
-            forces.push_back(reactionForce);
-        }
-    }
 
 
     // ---- Force de frottements ----
@@ -299,12 +327,9 @@ void DrawHero(const std::vector<POLYLINE>& polylines, RenderDims dims)
     GLOBAL_HERO_VELOCITY.x = (GLOBAL_HERO_VELOCITY.x + dt * totalForce.x) * dampingX;
     GLOBAL_HERO_VELOCITY.y = (GLOBAL_HERO_VELOCITY.y + dt * totalForce.y) * dampingY;
 
-    GLOBAL_BOTTOM_CONTACT = (GLOBAL_HERO_VELOCITY.y > -0.05f && GLOBAL_HERO_VELOCITY.y < 0.05f);
-
     GLOBAL_HERO_POS.x += GLOBAL_HERO_VELOCITY.x;
     GLOBAL_HERO_POS.y += GLOBAL_HERO_VELOCITY.y;
 
-    //POUR TEST -- A REMPLACER PAR CALCUL DEPUIS LES FORCES//
     if (IsKeyDown(KEY_RIGHT))
     {
         GLOBAL_HERO_ROTATION += 5.0f;
@@ -313,6 +338,8 @@ void DrawHero(const std::vector<POLYLINE>& polylines, RenderDims dims)
     {
         GLOBAL_HERO_ROTATION -= 5.0f;
     }
+
+    //POUR TEST -- A REMPLACER PAR CALCUL DEPUIS LES FORCES//
     /*if (IsKeyDown(KEY_RIGHT))
     {
         GLOBAL_HERO_POS.x = GLOBAL_HERO_POS.x + 0.5f;

@@ -176,29 +176,29 @@ src/DrawHero.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\raylib_game.dir\build.make CMakeFiles/raylib_game.dir/src/DrawHero.cpp.s
 .PHONY : src/DrawHero.cpp.s
 
-src/DrawPolyline.obj: src/DrawPolyline.cpp.obj
-.PHONY : src/DrawPolyline.obj
+src/DrawLevel.obj: src/DrawLevel.cpp.obj
+.PHONY : src/DrawLevel.obj
 
 # target to build an object file
-src/DrawPolyline.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\raylib_game.dir\build.make CMakeFiles/raylib_game.dir/src/DrawPolyline.cpp.obj
-.PHONY : src/DrawPolyline.cpp.obj
+src/DrawLevel.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\raylib_game.dir\build.make CMakeFiles/raylib_game.dir/src/DrawLevel.cpp.obj
+.PHONY : src/DrawLevel.cpp.obj
 
-src/DrawPolyline.i: src/DrawPolyline.cpp.i
-.PHONY : src/DrawPolyline.i
+src/DrawLevel.i: src/DrawLevel.cpp.i
+.PHONY : src/DrawLevel.i
 
 # target to preprocess a source file
-src/DrawPolyline.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\raylib_game.dir\build.make CMakeFiles/raylib_game.dir/src/DrawPolyline.cpp.i
-.PHONY : src/DrawPolyline.cpp.i
+src/DrawLevel.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\raylib_game.dir\build.make CMakeFiles/raylib_game.dir/src/DrawLevel.cpp.i
+.PHONY : src/DrawLevel.cpp.i
 
-src/DrawPolyline.s: src/DrawPolyline.cpp.s
-.PHONY : src/DrawPolyline.s
+src/DrawLevel.s: src/DrawLevel.cpp.s
+.PHONY : src/DrawLevel.s
 
 # target to generate assembly for a file
-src/DrawPolyline.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\raylib_game.dir\build.make CMakeFiles/raylib_game.dir/src/DrawPolyline.cpp.s
-.PHONY : src/DrawPolyline.cpp.s
+src/DrawLevel.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\raylib_game.dir\build.make CMakeFiles/raylib_game.dir/src/DrawLevel.cpp.s
+.PHONY : src/DrawLevel.cpp.s
 
 src/Level1_Screen1.obj: src/Level1_Screen1.cpp.obj
 .PHONY : src/Level1_Screen1.obj
@@ -431,9 +431,9 @@ help:
 	@echo ... src/DrawHero.obj
 	@echo ... src/DrawHero.i
 	@echo ... src/DrawHero.s
-	@echo ... src/DrawPolyline.obj
-	@echo ... src/DrawPolyline.i
-	@echo ... src/DrawPolyline.s
+	@echo ... src/DrawLevel.obj
+	@echo ... src/DrawLevel.i
+	@echo ... src/DrawLevel.s
 	@echo ... src/Level1_Screen1.obj
 	@echo ... src/Level1_Screen1.i
 	@echo ... src/Level1_Screen1.s

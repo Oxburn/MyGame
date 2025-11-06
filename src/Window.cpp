@@ -1,4 +1,5 @@
 #include "raylib.h"
+#include "rlgl.h"
 #include "Variables.h"
 #include "DetectSystemLanguage.h"
 #include "StartScreen.h"
@@ -6,14 +7,17 @@
 #include "Level1_Screen1.h"
 #include "Level1_Screen2.h"
 
-#include "rlgl.h"
+
 
 void Window() {
 
     // ---- Initialisation de la fenêtre ----
 
+    Image icon = LoadImage("assets/gameIcon.png");
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(0, 0, WINDOW_NAME);
+    SetWindowIcon(icon);
+    UnloadImage(icon);
     SetTargetFPS(WINDOW_FRAMERATE);
     SetExitKey(KEY_NULL);
 
@@ -58,6 +62,7 @@ void Window() {
     // ---- Comportement dynamique de la fenêtre ----
 
     bool isFullScreen = false;
+    bool GLOBAL_PAUSE = false;
     GLOBAL_DELAY = 0.0f;
     GLOBAL_MENU_CURSOR_POS = 0;
     GLOBAL_OPTIONS_CURSOR_POS = 0;
@@ -68,12 +73,19 @@ void Window() {
     GLOBAL_SOUND_CURSOR_POS = 100;
     GLOBAL_MUSIC_CURSOR_POS = 100;
     GLOBAL_CURRENT_SCREEN = SCREEN_START;
+    GLOBAL_HERO_PREVIOUS_TIME = GetTime();
     GLOBAL_HERO_RADIUS = 2.0f;
     //GLOBAL_HERO_POS = {52, 0};
     GLOBAL_HERO_POS = {20.0f, 80.0f};
     GLOBAL_HERO_MOVE = {0.0f, 0.0f};
     GLOBAL_HERO_VELOCITY = {0.0f, 0.0f};
     GLOBAL_HERO_ROTATION = 0.0f;
+
+    // Clic saut
+    GLOBAL_JUMP_CLICK_START_TIME = 0.0;
+    GLOBAL_JUMP_IS_PRESSED = false;
+    GLOBAL_JUMP_IS_RELEASED = true;
+    GLOBAL_JUMP_MAX_TIME = 0.5; // Durée max de saut en seconde
 
     while (!WindowShouldClose())
     {

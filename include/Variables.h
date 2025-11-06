@@ -12,6 +12,7 @@ extern int GLOBAL_FONT_SIZE;
 extern int GLOBAL_TEXT_SPACING;
 extern Font GLOBAL_FONT;
 
+extern bool GLOBAL_PAUSE;
 extern float GLOBAL_DELAY;
 extern int GLOBAL_MENU_CURSOR_POS;
 extern int GLOBAL_OPTIONS_CURSOR_POS;
@@ -23,11 +24,18 @@ extern int GLOBAL_SOUND_CURSOR_POS;
 extern int GLOBAL_MUSIC_CURSOR_POS;
 extern int GLOBAL_PAUSE_CURSOR_POS;
 
-extern float GLOBAL_HERO_RADIUS;    // Rayon de base du héros
+extern double GLOBAL_HERO_PREVIOUS_TIME;    // Pour la physique du héros
+extern float GLOBAL_HERO_RADIUS;            // Rayon de base du héros
 extern Vector2 GLOBAL_HERO_POS;
 extern Vector2 GLOBAL_HERO_MOVE;
 extern Vector2 GLOBAL_HERO_VELOCITY;
 extern float GLOBAL_HERO_ROTATION;
+
+// Clic saut
+extern double GLOBAL_JUMP_CLICK_START_TIME;
+extern bool GLOBAL_JUMP_IS_PRESSED;
+extern bool GLOBAL_JUMP_IS_RELEASED;
+extern double GLOBAL_JUMP_MAX_TIME;
 
 // Qualité
 constexpr float WINDOW_BASE_WIDTH_RATIO = 0.5;
@@ -43,6 +51,7 @@ constexpr Color BACKGROUND_COLOR = {30, 30, 30, 255};
 constexpr Color INACTIVE_COLOR = {128, 128, 128, 255};
 constexpr Color MOSS_COLOR = {151, 162, 70, 255};
 constexpr Color GRASS_COLOR = {91, 147, 4, 255};
+constexpr Color DIRT_COLOR = {95, 69, 48, 255};
 
 // Epaisseurs
 constexpr float HERO_THICKNESS = 4.0f;
@@ -76,7 +85,8 @@ extern SCREENS GLOBAL_CURRENT_SCREEN;
 struct POLYLINE {
     std::vector<Vector2> points;
     float thickness;
-    Color color;
+    Color boundaryColor;
+    Color surfaceColor;
 };
 
 #endif

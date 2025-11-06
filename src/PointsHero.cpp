@@ -4,7 +4,7 @@
 #include <cmath>
 
 
-int GLOBAL_HERO_ACCURACY = 30;      // Finesse de représentation du héros
+int GLOBAL_HERO_ACCURACY = 50;      // Finesse de représentation du héros
 
 
 std::vector<std::pair<float, Vector2>> PointsHero()
