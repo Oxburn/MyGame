@@ -82,9 +82,9 @@ enum SCREENS {
 extern SCREENS GLOBAL_CURRENT_SCREEN;
 
 // Structure des dessins
-struct POLYLINE {
-    std::vector<Vector2> points;
-    float thickness;
+struct LEVEL_DEFINITION {
+    std::vector<Vector2> boundaryPoints;
+    float boundaryThickness;
     Color boundaryColor;
     Color surfaceColor;
 };

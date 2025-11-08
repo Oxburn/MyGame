@@ -1,3 +1,3 @@
-C:/Users/bruno.richardon/Desktop/Projets/MyGame/build/CMakeFiles/raylib_game.dir
-C:/Users/bruno.richardon/Desktop/Projets/MyGame/build/CMakeFiles/edit_cache.dir
-C:/Users/bruno.richardon/Desktop/Projets/MyGame/build/CMakeFiles/rebuild_cache.dir
+C:/Users/brric/Desktop/Projets/MyGame/build/CMakeFiles/raylib_game.dir
+C:/Users/brric/Desktop/Projets/MyGame/build/CMakeFiles/edit_cache.dir
+C:/Users/brric/Desktop/Projets/MyGame/build/CMakeFiles/rebuild_cache.dir

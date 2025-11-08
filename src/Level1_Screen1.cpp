@@ -46,7 +46,7 @@ void Level1_Screen1() {
 
     // Regroupement des listes
 
-    std::vector<POLYLINE> polylines = {
+    std::vector<LEVEL_DEFINITION> levelDefinitions = {
         { moss1Pts, MOSS_THICKNESS, MOSS_COLOR, DIRT_COLOR },
         { moss2Pts, MOSS_THICKNESS, MOSS_COLOR, DIRT_COLOR },
         { tempMossPts, MOSS_THICKNESS, MOSS_COLOR, MOSS_COLOR }
@@ -62,10 +62,10 @@ void Level1_Screen1() {
 
     BeginTextureMode(GLOBAL_RENDER_TEXTURE);
         ClearBackground(BACKGROUND_COLOR);
-        for (const auto& poly : polylines) {
-            DrawLevel(poly.points, poly.thickness, poly.boundaryColor, poly.surfaceColor, dims);
+        for (const auto& levelDefinition : levelDefinitions) {
+            DrawLevel(levelDefinition, dims);
         }
-        DrawHero(polylines, dims);
+        DrawHero(levelDefinitions, dims);
     EndTextureMode();
 
     DrawRenderTextureToScreen(dims);

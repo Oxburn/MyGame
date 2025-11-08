@@ -5,6 +5,6 @@
 #include "RenderUtils.h"
 #include <vector>
 
-void DrawLevel(const std::vector<Vector2>& points, float thickness, Color boundaryColor, Color surfaceColor, RenderDims dims);
+void DrawLevel(LEVEL_DEFINITION levelDefinition, RenderDims dims);
 
 #endif

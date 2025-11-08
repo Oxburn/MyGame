@@ -6,6 +6,6 @@
 #include "RenderUtils.h"
 #include <vector>
 
-void DrawHero(const std::vector<POLYLINE>& polylines, RenderDims dims);
+void DrawHero(std::vector<LEVEL_DEFINITION>& levelDefinitions, RenderDims dims);
 
 #endif

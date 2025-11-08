@@ -117,9 +117,14 @@ void DrawSurface(const std::vector<Vector2>& points, Color surfaceColor)
 }
 
 
-void DrawLevel(const std::vector<Vector2>& points, float thickness, Color boundaryColor, Color surfaceColor, RenderDims dims)
+void DrawLevel(LEVEL_DEFINITION levelDefinition, RenderDims dims)
 {
-    if (points.size() < 2) return;
+    std::vector<Vector2> boundaryPoints = levelDefinition.boundaryPoints;
+    float boundaryThickness = levelDefinition.boundaryThickness;
+    Color boundaryColor = levelDefinition.boundaryColor;
+    Color surfaceColor = levelDefinition.surfaceColor;
+
+    if (boundaryPoints.size() < 2) return;
 
     // ---- Calcul des éléments pour le respect du ratio (fenêtre) ----
     
@@ -127,8 +132,8 @@ void DrawLevel(const std::vector<Vector2>& points, float thickness, Color bounda
     int renderTextureHeight = dims.renderTextureHeight;
 
     std::vector<Vector2> scaledPoints;
-    scaledPoints.reserve(points.size());
-    for (auto& p : points)
+    scaledPoints.reserve(boundaryPoints.size());
+    for (auto& p : boundaryPoints)
     {
         scaledPoints.push_back({
             (float)(p.x * renderTextureWidth / 100.0f),
@@ -143,7 +148,7 @@ void DrawLevel(const std::vector<Vector2>& points, float thickness, Color bounda
     {
         Vector2 startPt = scaledPoints[i];
         Vector2 endtPt = scaledPoints[i+1];
-        DrawLineEx(startPt, endtPt, thickness, boundaryColor);
+        DrawLineEx(startPt, endtPt, boundaryThickness, boundaryColor);
     }
 
 

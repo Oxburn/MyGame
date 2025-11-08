@@ -1,5 +1,5 @@
 CMakeFiles/raylib_game.dir/src/DetectSystemLanguage.cpp.obj: \
- C:\Users\bruno.richardon\Desktop\Projets\MyGame\src\DetectSystemLanguage.cpp \
+ C:\Users\brric\Desktop\Projets\MyGame\src\DetectSystemLanguage.cpp \
  C:/msys64/mingw64/include/windows.h C:/msys64/mingw64/include/_mingw.h \
  C:/msys64/mingw64/include/_mingw_mac.h \
  C:/msys64/mingw64/include/_mingw_secapi.h \

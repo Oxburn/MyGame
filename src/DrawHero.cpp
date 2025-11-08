@@ -46,7 +46,7 @@ float IntersectSegmentsDistance(Vector2 p1, Vector2 p2, Vector2 p3, Vector2 p4)
     return GLOBAL_HERO_RADIUS; // pas d’intersection
 }
 
-std::vector<Vector2> GetProximity(const std::vector<POLYLINE>& polylines)
+std::vector<Vector2> GetProximity(const std::vector<LEVEL_DEFINITION>& levelDefinitions)
 {
     std::vector<Vector2> results;
 
@@ -66,12 +66,15 @@ std::vector<Vector2> GetProximity(const std::vector<POLYLINE>& polylines)
         // Distance en espace non-scalé (radial)
         float minDist = GLOBAL_HERO_RADIUS; 
 
-        for (const auto& poly : polylines)
+        for (const auto& levelDefinition : levelDefinitions)
         {
-            for (size_t j = 0; j + 1 < poly.points.size(); j++)
+            for (size_t j = 0; j + 1 < levelDefinition.boundaryPoints.size(); j++)
             {
                 // dist est la distance le long du segment A->B (dans l'espace compressé)
-                float dist = IntersectSegmentsDistance(A, B, poly.points[j], poly.points[j + 1]);
+                float dist = IntersectSegmentsDistance(
+                    A, B,
+                    levelDefinition.boundaryPoints[j],
+                    levelDefinition.boundaryPoints[j + 1]);
                 if (dist >= 0.0f)
                 {
                     // convertir dist (espace compressé) -> t (0..1) -> distance réelle non-scalée
@@ -269,7 +272,7 @@ Vector2 ComputeForces(std::vector<Vector2> proximityData, RenderDims dims)
     return {totalForceX, totalForceY};
 }
 
-void DrawHero(const std::vector<POLYLINE>& polylines, RenderDims dims)
+void DrawHero(std::vector<LEVEL_DEFINITION>& levelDefinitions, RenderDims dims)
 {
     // ---- Calcul des éléments pour le respect du ratio (fenêtre) ----
     
@@ -279,7 +282,7 @@ void DrawHero(const std::vector<POLYLINE>& polylines, RenderDims dims)
 
     // ---- Dessin du héros ----
 
-    std::vector<Vector2> proximityData = GetProximity(polylines);
+    std::vector<Vector2> proximityData = GetProximity(levelDefinitions);
 
     for (size_t i = 0; i < proximityData.size(); i++)
     {

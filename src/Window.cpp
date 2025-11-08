@@ -8,7 +8,6 @@
 #include "Level1_Screen2.h"
 
 
-
 void Window() {
 
     // ---- Initialisation de la fenêtre ----
@@ -46,11 +45,15 @@ void Window() {
 
     // ---- Chargement de la police ----
 
+    // Debug si Open GL < 4
+    int glVersion = rlGetVersion();
     int fontCoef = 1;
-    if (!(rlGetVersion() > 2))
+    if (glVersion < 4)
     {
         fontCoef = 3;
     }
+
+    // Arguments de textes
     int codepoints[CODEPOINT_COUNT];
     for (int i = 0; i < CODEPOINT_COUNT; i++) codepoints[i] = 32 + i;
     codepoints[CODEPOINT_COUNT - 1] = 0x27A4; // ➤

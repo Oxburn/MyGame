@@ -1,6 +1,6 @@
 CMakeFiles/raylib_game.dir/src/Variables.cpp.obj: \
- C:\Users\bruno.richardon\Desktop\Projets\MyGame\src\Variables.cpp \
- C:/Users/bruno.richardon/Desktop/Projets/MyGame/include/Variables.h \
+ C:\Users\brric\Desktop\Projets\MyGame\src\Variables.cpp \
+ C:/Users/brric/Desktop/Projets/MyGame/include/Variables.h \
  C:/msys64/mingw64/include/raylib.h \
  C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stdarg.h \
  C:/msys64/mingw64/include/stdarg.h \
