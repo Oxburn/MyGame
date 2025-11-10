@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-find_package(raylib 4.5 REQUIRED)                                           # Trouver Raylib 
+find_package(raylib 5.5 REQUIRED)                                           # Trouver Raylib 
 include_directories(${CMAKE_SOURCE_DIR}/include)                            # Inclure les headers
 file(GLOB_RECURSE SOURCES "src/*.cpp")                                      # Récupérer tous les fichiers source
 add_executable(${PROJECT_NAME} ${SOURCES})                                  # Créer l'exécutable

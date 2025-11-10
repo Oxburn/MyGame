@@ -1,5 +1,5 @@
 CMakeFiles/raylib_game.dir/src/DrawHero.cpp.obj: \
- C:\Users\brric\Desktop\Projets\MyGame\src\DrawHero.cpp \
+ C:\Users\bruno.richardon\Desktop\Projets\MyGame\src\DrawHero.cpp \
  C:/msys64/mingw64/include/raylib.h \
  C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stdarg.h \
  C:/msys64/mingw64/include/stdarg.h \
@@ -64,7 +64,7 @@ CMakeFiles/raylib_game.dir/src/DrawHero.cpp.obj: \
  C:/msys64/mingw64/include/c++/15.2.0/tr1/poly_hermite.tcc \
  C:/msys64/mingw64/include/c++/15.2.0/tr1/poly_laguerre.tcc \
  C:/msys64/mingw64/include/c++/15.2.0/tr1/riemann_zeta.tcc \
- C:/Users/brric/Desktop/Projets/MyGame/include/Variables.h \
+ C:/Users/bruno.richardon/Desktop/Projets/MyGame/include/Variables.h \
  C:/msys64/mingw64/include/c++/15.2.0/string \
  C:/msys64/mingw64/include/c++/15.2.0/bits/stringfwd.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/memoryfwd.h \
@@ -125,8 +125,8 @@ CMakeFiles/raylib_game.dir/src/DrawHero.cpp.obj: \
  C:/msys64/mingw64/include/c++/15.2.0/bits/stl_vector.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/stl_bvector.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/vector.tcc \
- C:/Users/brric/Desktop/Projets/MyGame/include/RenderUtils.h \
- C:/Users/brric/Desktop/Projets/MyGame/include/PointsHero.h \
+ C:/Users/bruno.richardon/Desktop/Projets/MyGame/include/RenderUtils.h \
+ C:/Users/bruno.richardon/Desktop/Projets/MyGame/include/PointsHero.h \
  C:/msys64/mingw64/include/c++/15.2.0/algorithm \
  C:/msys64/mingw64/include/c++/15.2.0/bits/stl_algo.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/algorithmfwd.h \

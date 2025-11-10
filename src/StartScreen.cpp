@@ -22,14 +22,6 @@ void StartScreen() {
     };
 
 
-    // ---- Calcul des éléments pour le respect du ratio (fenêtre) ----
-
-    RenderDims dims = ComputeRenderDims();
-    int renderTextureWidth = dims.renderTextureWidth;
-    int renderTextureHeight = dims.renderTextureHeight;
-    int scaleX = dims.scaleX;
-    
-
     // ---- Gestion du curseur sélectionné (haut/bas) ----
 
     if (IsKeyPressed(KEY_DOWN)) GLOBAL_MENU_CURSOR_POS += 1;
@@ -67,9 +59,9 @@ void StartScreen() {
 
             std::string text = startScreenTexts[i].texts[GLOBAL_LANGUAGE_CURSOR_POS];
             float textWidth = MeasureTextEx(GLOBAL_FONT, text.c_str(), GLOBAL_FONT_SIZE, GLOBAL_TEXT_SPACING).x;
-            float posXRT = (renderTextureWidth - textWidth) / 2.0f;
-            float posYRT = renderTextureHeight / 2.0f + i * LINE_HEIGHT_FACTOR * GLOBAL_FONT_SIZE;
-            float cursorOffsetRT = cursorOffsetPx * scaleX;
+            float posXRT = (GLOBAL_RENDER_WIDTH - textWidth) / 2.0f;
+            float posYRT = GLOBAL_RENDER_HEIGHT / 2.0f + i * LINE_HEIGHT_FACTOR * GLOBAL_FONT_SIZE;
+            float cursorOffsetRT = cursorOffsetPx * GLOBAL_SCALE_X;
             Vector2 position = { posXRT, posYRT };
 
             if (i == GLOBAL_MENU_CURSOR_POS) {
@@ -86,5 +78,5 @@ void StartScreen() {
         }
 
     EndTextureMode();
-    DrawRenderTextureToScreen(dims);
+    DrawRenderTextureToScreen();
 }

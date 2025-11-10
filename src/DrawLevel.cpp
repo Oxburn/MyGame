@@ -38,7 +38,6 @@ std::vector<std::vector<Vector2>> curveParallel (const std::vector<Vector2>& poi
             C = Vector2Add(C, Vector2Scale(dir, distance));
             D = Vector2Subtract(D, Vector2Scale(dir, distance));
             parallelCurves.push_back({C, D});
-            // DrawLineEx(C, D, 5.0f, RED); // Affichage des courbes hors des surfaces (pour debug)
         }
     }
 
@@ -80,25 +79,34 @@ bool SegmentTouchesTriangle(Vector2 A, Vector2 B, Vector2 C, Vector2 D, Vector2 
     return false; // Aucun contact
 }
 
-void DrawSurface(const std::vector<Vector2>& points, Color surfaceColor)
+void DrawSurface(const std::vector<Vector2>& boundaryPoints, std::vector<std::vector<Vector2>> parallelCurve, Color surfaceColor)
 {
-    std::vector<std::vector<Vector2>> parallelCurves = curveParallel(points, 1.0f);
-
-    for (size_t i = 0; i < points.size() - 1; i++)
+    for (size_t i = 0; i < boundaryPoints.size() - 1; i++)
     {
-        Vector2 A = points[i];
-        Vector2 B = points[(i+1) % points.size()];
+        Vector2 A = boundaryPoints[i];
+        Vector2 B = boundaryPoints[(i+1) % boundaryPoints.size()];
 
-        for (size_t j = 0; j < points.size() - 1; j++)
+        for (size_t j = 0; j < boundaryPoints.size() - 1; j++)
         {
             if (i != j)
             {
-                Vector2 C = points[j];
+                Vector2 C = boundaryPoints[j];
                 bool contact = false;
-                for (const auto& parallelCurve: parallelCurves)
+                for (const auto& parallelPoints: parallelCurve)
                 {
-                    Vector2 D = parallelCurve[0];
-                    Vector2 E = parallelCurve[1];
+                    Vector2 D = parallelPoints[0];
+                    Vector2 E = parallelPoints[1];
+
+                    Vector2 drawD = {
+                        (float)(D.x * GLOBAL_RENDER_WIDTH / 100),
+                        (float)(D.y * GLOBAL_RENDER_HEIGHT / 100)
+                    };
+                    Vector2 drawE = {
+                        (float)(E.x * GLOBAL_RENDER_WIDTH / 100),
+                        (float)(E.y * GLOBAL_RENDER_HEIGHT / 100)
+                    };
+
+                    DrawLineEx(drawD, drawE, 1.0f, RED); // Affichage des courbes parallèles (pour debug)
 
                     if (SegmentTouchesTriangle(A, B, C, D, E))
                     {
@@ -109,7 +117,19 @@ void DrawSurface(const std::vector<Vector2>& points, Color surfaceColor)
 
                 if (!contact)
                 {
-                     DrawTriangle(A, B, C, surfaceColor);
+                    Vector2 drawA = {
+                        (float)(A.x * GLOBAL_RENDER_WIDTH / 100),
+                        (float)(A.y * GLOBAL_RENDER_HEIGHT / 100)
+                    };
+                    Vector2 drawB {
+                        (float)(B.x * GLOBAL_RENDER_WIDTH / 100),
+                        (float)(B.y * GLOBAL_RENDER_HEIGHT / 100)
+                    };
+                    Vector2 drawC = {
+                        (float)(C.x * GLOBAL_RENDER_WIDTH / 100),
+                        (float)(C.y * GLOBAL_RENDER_HEIGHT / 100)
+                    };
+                    DrawTriangle(drawA, drawB, drawC, surfaceColor);
                 }
             }
         }
@@ -117,42 +137,34 @@ void DrawSurface(const std::vector<Vector2>& points, Color surfaceColor)
 }
 
 
-void DrawLevel(LEVEL_DEFINITION levelDefinition, RenderDims dims)
+void DrawLevel(LEVEL_DEFINITION levelDefinition)
 {
     std::vector<Vector2> boundaryPoints = levelDefinition.boundaryPoints;
     float boundaryThickness = levelDefinition.boundaryThickness;
     Color boundaryColor = levelDefinition.boundaryColor;
     Color surfaceColor = levelDefinition.surfaceColor;
+    std::vector<std::vector<Vector2>> parallelCurve = levelDefinition.parallelCurve;
 
     if (boundaryPoints.size() < 2) return;
 
-    // ---- Calcul des éléments pour le respect du ratio (fenêtre) ----
-    
-    int renderTextureWidth = dims.renderTextureWidth;
-    int renderTextureHeight = dims.renderTextureHeight;
 
-    std::vector<Vector2> scaledPoints;
-    scaledPoints.reserve(boundaryPoints.size());
-    for (auto& p : boundaryPoints)
+    // ---- Création des contours ----
+
+    for (size_t i = 0; i < boundaryPoints.size() - 1; i++)
     {
-        scaledPoints.push_back({
-            (float)(p.x * renderTextureWidth / 100.0f),
-            (float)(p.y * renderTextureHeight / 100.0f)
-        });
-    }
-
-
-    // ---- Création des polydroites ----
-
-    for (size_t i = 0; i < scaledPoints.size() - 1; i++)
-    {
-        Vector2 startPt = scaledPoints[i];
-        Vector2 endtPt = scaledPoints[i+1];
+        Vector2 startPt = {
+            (float)(boundaryPoints[i].x * GLOBAL_RENDER_WIDTH / 100),
+            (float)(boundaryPoints[i].y * GLOBAL_RENDER_HEIGHT / 100),
+        };
+        Vector2 endtPt = {
+            (float)(boundaryPoints[i + 1].x * GLOBAL_RENDER_WIDTH / 100),
+            (float)(boundaryPoints[i + 1].y * GLOBAL_RENDER_HEIGHT / 100),
+        };
         DrawLineEx(startPt, endtPt, boundaryThickness, boundaryColor);
     }
 
 
     // ---- Création des surfaces ----
 
-    DrawSurface(scaledPoints, surfaceColor);
+    DrawSurface(boundaryPoints, parallelCurve, surfaceColor);
 }

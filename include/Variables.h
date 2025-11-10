@@ -11,7 +11,6 @@ extern RenderTexture2D GLOBAL_RENDER_TEXTURE;
 extern int GLOBAL_FONT_SIZE;
 extern int GLOBAL_TEXT_SPACING;
 extern Font GLOBAL_FONT;
-
 extern bool GLOBAL_PAUSE;
 extern float GLOBAL_DELAY;
 extern int GLOBAL_MENU_CURSOR_POS;
@@ -23,6 +22,10 @@ extern int GLOBAL_BRIGHTNESS_CURSOR_POS;
 extern int GLOBAL_SOUND_CURSOR_POS;
 extern int GLOBAL_MUSIC_CURSOR_POS;
 extern int GLOBAL_PAUSE_CURSOR_POS;
+
+extern int GLOBAL_RENDER_WIDTH;
+extern int GLOBAL_RENDER_HEIGHT;
+extern float GLOBAL_SCALE_X;
 
 extern double GLOBAL_HERO_PREVIOUS_TIME;    // Pour la physique du héros
 extern float GLOBAL_HERO_RADIUS;            // Rayon de base du héros
@@ -81,12 +84,22 @@ enum SCREENS {
 };
 extern SCREENS GLOBAL_CURRENT_SCREEN;
 
-// Structure des dessins
+// Structure de définition des morceaux de niveaux
+struct LEVEL_PART_DEFINITION {
+    std::vector<Vector2> boundaryPoints;
+    float boundaryThickness;
+    Color boundaryColor;
+    Color surfaceColor;
+};
+
+
+// Structure de définition des niveaux
 struct LEVEL_DEFINITION {
     std::vector<Vector2> boundaryPoints;
     float boundaryThickness;
     Color boundaryColor;
     Color surfaceColor;
+    std::vector<std::vector<Vector2>> parallelCurve;
 };
 
 #endif

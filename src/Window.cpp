@@ -1,5 +1,4 @@
 #include "raylib.h"
-#include "rlgl.h"
 #include "Variables.h"
 #include "DetectSystemLanguage.h"
 #include "StartScreen.h"
@@ -36,6 +35,13 @@ void Window() {
     SetWindowSize(windowWidth, windowHeight);
     SetWindowPosition(windowPositionX, windowPositionY);
 
+    float currentRatio = (float)windowWidth / windowHeight;
+    int drawWidth = windowWidth;
+    if (currentRatio > WINDOW_RATIO)
+    {
+        drawWidth = (int)(windowHeight * WINDOW_RATIO);
+    }
+
 
     // ---- Chargement de la texture ----
 
@@ -45,18 +51,11 @@ void Window() {
 
     // ---- Chargement de la police ----
 
-    // Debug si Open GL < 4
-    int glVersion = rlGetVersion();
-    int fontCoef = 1;
-    if (glVersion < 4)
-    {
-        fontCoef = 3;
-    }
 
-    // Arguments de textes
     int codepoints[CODEPOINT_COUNT];
     for (int i = 0; i < CODEPOINT_COUNT; i++) codepoints[i] = 32 + i;
-    codepoints[CODEPOINT_COUNT - 1] = 0x27A4; // ➤
+    codepoints[CODEPOINT_COUNT - 1] = 0x27A4;  // ➤
+    float fontCoef = 2400 / screenHeight;
     GLOBAL_FONT_SIZE = (int)(fontCoef * windowHeight * FONT_SIZE_RATIO);
     GLOBAL_TEXT_SPACING = (int)(GLOBAL_FONT_SIZE * 0.05);
     GLOBAL_FONT = LoadFontEx(FONT_FILE, GLOBAL_FONT_SIZE, codepoints, CODEPOINT_COUNT);
@@ -64,8 +63,10 @@ void Window() {
 
     // ---- Comportement dynamique de la fenêtre ----
 
+    
+
     bool isFullScreen = false;
-    bool GLOBAL_PAUSE = false;
+    GLOBAL_PAUSE = false;
     GLOBAL_DELAY = 0.0f;
     GLOBAL_MENU_CURSOR_POS = 0;
     GLOBAL_OPTIONS_CURSOR_POS = 0;
@@ -90,8 +91,14 @@ void Window() {
     GLOBAL_JUMP_IS_RELEASED = true;
     GLOBAL_JUMP_MAX_TIME = 0.5; // Durée max de saut en seconde
 
+
     while (!WindowShouldClose())
     {
+        // Dimension écran actif
+        GLOBAL_RENDER_WIDTH = GLOBAL_RENDER_TEXTURE.texture.width;
+        GLOBAL_RENDER_HEIGHT = GLOBAL_RENDER_TEXTURE.texture.height;
+        GLOBAL_SCALE_X = (float)GLOBAL_RENDER_WIDTH / (float)drawWidth;
+
         // Gestion du plein écran
         if (IsKeyPressed(KEY_F11) or IsKeyPressed(KEY_ESCAPE)) {
             if (!isFullScreen) {

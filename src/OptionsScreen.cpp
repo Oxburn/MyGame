@@ -46,10 +46,7 @@ void OptionsScreen() {
 
     // ---- Calcul des éléments pour le respect du ratio (fenêtre) ----
 
-    RenderDims dims = ComputeRenderDims();
-    int renderTextureWidth = dims.renderTextureWidth;
-    int renderTextureHeight = dims.renderTextureHeight;
-    int scaleX = dims.scaleX;
+    //int scaleX = dims.scaleX;
 
     float maxTextWidth = 0;
     for (int i = 0; i < (int)optionsScreenTexts.size(); i++) {
@@ -140,9 +137,9 @@ void OptionsScreen() {
 
             std::string text = optionsScreenTexts[i].texts[GLOBAL_LANGUAGE_CURSOR_POS];
 
-            float posXRT = renderTextureWidth / 10.0f;
-            float posYRT = renderTextureHeight / 10.0f + i * LINE_HEIGHT_FACTOR * GLOBAL_FONT_SIZE;
-            float cursorOffsetRT = cursorOffsetPx * scaleX;
+            float posXRT = GLOBAL_RENDER_WIDTH / 10.0f;
+            float posYRT = GLOBAL_RENDER_HEIGHT / 10.0f + i * LINE_HEIGHT_FACTOR * GLOBAL_FONT_SIZE;
+            float cursorOffsetRT = cursorOffsetPx * GLOBAL_SCALE_X;
             Vector2 textPosition = { posXRT, posYRT };
             Vector2 barPosition = { posXRT + 1.2f * maxTextWidth, posYRT + GLOBAL_FONT_SIZE * 0.5f };
             Vector2 optionPosition = { posXRT + 1.2f * maxTextWidth, posYRT };
@@ -202,5 +199,5 @@ void OptionsScreen() {
         }
 
     EndTextureMode();
-    DrawRenderTextureToScreen(dims);
+    DrawRenderTextureToScreen();
 }

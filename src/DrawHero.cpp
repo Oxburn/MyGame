@@ -13,7 +13,7 @@
 // Paramètres
 float GLOBAL_MAX_SPEED = 3.0f;
 float GLOBAL_HERO_ACCELERATION = 0.5f;
-float GLOBAL_HERO_BOUNCE = 1.0f;      // Rebond du héros
+float GLOBAL_HERO_BOUNCE = 1.0f;      // Ecrasement du héros (0.5 -> Très écrasé / 5.0f -> Peu écrasé)
 Vector2 GLOBAL_GRAVITY_FORCE = {0.0f, 7.0f};
 float GLOBAL_JUMP_POWER = 15.0f; // 8.0f (un peu plus que la gravité) -> Saut minimal
 
@@ -97,14 +97,8 @@ std::vector<Vector2> GetProximity(const std::vector<LEVEL_DEFINITION>& levelDefi
     return results;
 }
 
-Vector2 ComputeForces(std::vector<Vector2> proximityData, RenderDims dims)
+Vector2 ComputeForces(std::vector<Vector2> proximityData)
 {
-    // ---- Calcul des éléments pour le respect du ratio (fenêtre) ----
-    
-    int renderTextureWidth = dims.renderTextureWidth;
-    int renderTextureHeight = dims.renderTextureHeight;
-
-
     // ---- Pour rassembler les forces et faire le bilan ----
 
     std::vector<Vector2> forces = {GLOBAL_GRAVITY_FORCE};
@@ -120,7 +114,7 @@ Vector2 ComputeForces(std::vector<Vector2> proximityData, RenderDims dims)
         if (distance < GLOBAL_HERO_RADIUS) {
 
             float penetration = GLOBAL_HERO_RADIUS - distance;
-            float totalForce = std::min(GLOBAL_HERO_BOUNCE * penetration, GLOBAL_MAX_SPEED);
+            float totalForce = GLOBAL_HERO_BOUNCE * penetration;
 
             float reactionForceX = totalForce * cos(angle + PI);
             float reactionForceY = totalForce * sin(angle + PI);
@@ -129,6 +123,8 @@ Vector2 ComputeForces(std::vector<Vector2> proximityData, RenderDims dims)
         }
     }
 
+
+    
 
     // ---- Forces du saut (proportionnelles aux Forces de réaction !) ----
 
@@ -206,13 +202,13 @@ Vector2 ComputeForces(std::vector<Vector2> proximityData, RenderDims dims)
     for (size_t i = 0; i < forces.size(); i++)
     {
         Vector2 start = {
-            (float)(GLOBAL_HERO_POS.x * renderTextureWidth / 100),
-            (float)(GLOBAL_HERO_POS.y * renderTextureHeight / 100)
+            (float)(GLOBAL_HERO_POS.x * GLOBAL_RENDER_WIDTH / 100),
+            (float)(GLOBAL_HERO_POS.y * GLOBAL_RENDER_HEIGHT / 100)
         };
 
         Vector2 end = {
-            (float)((GLOBAL_HERO_POS.x + forces[i].x) * renderTextureWidth / 100),
-            (float)((GLOBAL_HERO_POS.y + forces[i].y) * renderTextureHeight / 100)
+            (float)((GLOBAL_HERO_POS.x + forces[i].x) * GLOBAL_RENDER_WIDTH / 100),
+            (float)((GLOBAL_HERO_POS.y + forces[i].y) * GLOBAL_RENDER_HEIGHT / 100)
         };
 
         // Corps de la flèche
@@ -272,14 +268,9 @@ Vector2 ComputeForces(std::vector<Vector2> proximityData, RenderDims dims)
     return {totalForceX, totalForceY};
 }
 
-void DrawHero(std::vector<LEVEL_DEFINITION>& levelDefinitions, RenderDims dims)
+
+void DrawHero(std::vector<LEVEL_DEFINITION>& levelDefinitions)
 {
-    // ---- Calcul des éléments pour le respect du ratio (fenêtre) ----
-    
-    int renderTextureWidth = dims.renderTextureWidth;
-    int renderTextureHeight = dims.renderTextureHeight;
-
-
     // ---- Dessin du héros ----
 
     std::vector<Vector2> proximityData = GetProximity(levelDefinitions);
@@ -298,15 +289,15 @@ void DrawHero(std::vector<LEVEL_DEFINITION>& levelDefinitions, RenderDims dims)
         float endPtY = GLOBAL_HERO_POS.y + endDistance * sinf(endAngle);
 
         startPtX = GLOBAL_HERO_POS.x + (startPtX - GLOBAL_HERO_POS.x) / WINDOW_RATIO;
-        endPtX   = GLOBAL_HERO_POS.x + (endPtX - GLOBAL_HERO_POS.x) / WINDOW_RATIO;
+        endPtX = GLOBAL_HERO_POS.x + (endPtX - GLOBAL_HERO_POS.x) / WINDOW_RATIO;
 
         Vector2 startPt = { 
-            (float)(startPtX * renderTextureWidth/100),
-            (float)(startPtY * renderTextureHeight/100)
+            (float)(startPtX * GLOBAL_RENDER_WIDTH / 100),
+            (float)(startPtY * GLOBAL_RENDER_HEIGHT / 100)
         };
-        Vector2 endtPt = {
-            (float)(endPtX * renderTextureWidth/100),
-            (float)(endPtY * renderTextureHeight/100)
+        Vector2 endPt = { 
+            (float)(endPtX * GLOBAL_RENDER_WIDTH / 100),
+            (float)(endPtY * GLOBAL_RENDER_HEIGHT / 100)
         };
 
         float t = (float)i / (float)(proximityData.size() - 1); // de 0.0 à 1.0
@@ -315,7 +306,7 @@ void DrawHero(std::vector<LEVEL_DEFINITION>& levelDefinitions, RenderDims dims)
         unsigned char b = (unsigned char)(150 + t * 105); // de 150 à 255
         Color heroColor = {r, g, b, 255};
 
-        DrawLineEx(startPt, endtPt, 2.0f, heroColor);
+        DrawLineEx(startPt, endPt, 2.0f, heroColor);
     }
     
 
@@ -325,7 +316,7 @@ void DrawHero(std::vector<LEVEL_DEFINITION>& levelDefinitions, RenderDims dims)
     const float dampingX = 0.5f;
     const float dampingY = 0.6f;
 
-    Vector2 totalForce = ComputeForces(proximityData, dims);
+    Vector2 totalForce = ComputeForces(proximityData);
 
     GLOBAL_HERO_VELOCITY.x = (GLOBAL_HERO_VELOCITY.x + dt * totalForce.x) * dampingX;
     GLOBAL_HERO_VELOCITY.y = (GLOBAL_HERO_VELOCITY.y + dt * totalForce.y) * dampingY;

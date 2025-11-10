@@ -54,7 +54,7 @@ void Level1_Screen2() {
 
     // Regroupement des listes
 
-    std::vector<LEVEL_DEFINITION> levelDefinitions = {
+    /*std::vector<LEVEL_DEFINITION> levelDefinitions = {
         { moss1Pts, MOSS_THICKNESS, MOSS_COLOR, DIRT_COLOR },
         { grassPts, GRASS_THICKNESS, GRASS_COLOR, DIRT_COLOR },
         { moss2Pts, MOSS_THICKNESS, MOSS_COLOR, DIRT_COLOR },
@@ -79,5 +79,5 @@ void Level1_Screen2() {
         DrawHero(levelDefinitions, dims);
 
     EndTextureMode();
-    DrawRenderTextureToScreen(dims);
+    DrawRenderTextureToScreen(dims);*/
 }

@@ -1,6 +1,13 @@
 #include "Variables.h"
 #include "RenderUtils.h"
 
+struct RenderDims {
+    int drawWidth;
+    int drawHeight;
+    int offsetX;
+    int offsetY;
+};
+
 RenderDims ComputeRenderDims()
 {
     int windowWidth = GetScreenWidth();
@@ -18,16 +25,13 @@ RenderDims ComputeRenderDims()
     int offsetX = (windowWidth - drawWidth) / 2;
     int offsetY = (windowHeight - drawHeight) / 2;
 
-    int renderTextureWidth = GLOBAL_RENDER_TEXTURE.texture.width;
-    int renderTextureHeight = GLOBAL_RENDER_TEXTURE.texture.height;
-
-    float scaleX = (float)renderTextureWidth / (float)drawWidth;
-
-    return RenderDims{drawWidth, drawHeight, offsetX, offsetY, renderTextureWidth, renderTextureHeight, scaleX};
+    return RenderDims{drawWidth, drawHeight, offsetX, offsetY};
 }
 
-void DrawRenderTextureToScreen(const RenderDims& dims)
+void DrawRenderTextureToScreen()
 {
+    RenderDims dims = ComputeRenderDims();
+
     BeginDrawing();
         ClearBackground(NO_DRAW_COLOR);
         Rectangle srcRect = { 0.0f, 0.0f,
