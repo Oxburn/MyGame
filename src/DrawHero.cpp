@@ -321,9 +321,14 @@ void DrawHero(std::vector<LEVEL_DEFINITION>& levelDefinitions)
     GLOBAL_HERO_VELOCITY.x = (GLOBAL_HERO_VELOCITY.x + dt * totalForce.x) * dampingX;
     GLOBAL_HERO_VELOCITY.y = (GLOBAL_HERO_VELOCITY.y + dt * totalForce.y) * dampingY;
 
+
+    // ---- Animation du héros ----
+
+    // Translation
     GLOBAL_HERO_POS.x += GLOBAL_HERO_VELOCITY.x;
     GLOBAL_HERO_POS.y += GLOBAL_HERO_VELOCITY.y;
 
+    // Rotation
     if (IsKeyDown(KEY_RIGHT))
     {
         GLOBAL_HERO_ROTATION += 5.0f;
@@ -332,27 +337,4 @@ void DrawHero(std::vector<LEVEL_DEFINITION>& levelDefinitions)
     {
         GLOBAL_HERO_ROTATION -= 5.0f;
     }
-
-    //POUR TEST -- A REMPLACER PAR CALCUL DEPUIS LES FORCES//
-    /*if (IsKeyDown(KEY_RIGHT))
-    {
-        GLOBAL_HERO_POS.x = GLOBAL_HERO_POS.x + 0.5f;
-        GLOBAL_HERO_ROTATION = GLOBAL_HERO_ROTATION + 5.0f;
-    }
-    if (IsKeyDown(KEY_LEFT))
-    {
-        GLOBAL_HERO_POS.x = GLOBAL_HERO_POS.x - 0.5f;
-        GLOBAL_HERO_ROTATION = GLOBAL_HERO_ROTATION - 5.0f;
-    }
-    if (IsKeyDown(KEY_DOWN))
-    {
-        GLOBAL_HERO_POS.y = GLOBAL_HERO_POS.y + 0.5f;
-        GLOBAL_HERO_ROTATION = GLOBAL_HERO_ROTATION + 5.0f;
-    }
-    if (IsKeyDown(KEY_UP))
-    {
-        GLOBAL_HERO_POS.y = GLOBAL_HERO_POS.y - 0.5f;
-        GLOBAL_HERO_ROTATION = GLOBAL_HERO_ROTATION - 5.0f;
-    }*/
-    //POUR TEST -- A SUPPRIMER//
 }

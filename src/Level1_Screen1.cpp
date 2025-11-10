@@ -69,14 +69,16 @@ void Level1_Screen1() {
         Color boundaryColor = levelPartDefinition.boundaryColor;
         Color surfaceColor = levelPartDefinition.surfaceColor;
 
-        std::vector<std::vector<Vector2>> parallelCurves = curveParallel(boundaryPoints, 0.1f);
+        std::vector<std::vector<Vector2>> parallelCurve = CurveParallel(boundaryPoints, 0.1f);
+        std::vector<std::vector<Vector2>> innerSurface = SurfaceInner(boundaryPoints, parallelCurve);
 
         levelDefinitions.push_back({
             boundaryPoints,
             boundaryThickness,
             boundaryColor,
             surfaceColor,
-            parallelCurves
+            parallelCurve,
+            innerSurface
         });
 
     }

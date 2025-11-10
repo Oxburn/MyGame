@@ -5,7 +5,8 @@
 #include "RenderUtils.h"
 #include <vector>
 
-std::vector<std::vector<Vector2>> curveParallel (const std::vector<Vector2>& points, float distance);
+std::vector<std::vector<Vector2>> CurveParallel (const std::vector<Vector2>& boundaryPoints, float distance);
+std::vector<std::vector<Vector2>> SurfaceInner (const std::vector<Vector2>& boundaryPoints, std::vector<std::vector<Vector2>>& parallelCurve);
 void DrawLevel(LEVEL_DEFINITION levelDefinition);
 
 #endif

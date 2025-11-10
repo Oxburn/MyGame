@@ -100,6 +100,7 @@ struct LEVEL_DEFINITION {
     Color boundaryColor;
     Color surfaceColor;
     std::vector<std::vector<Vector2>> parallelCurve;
+    std::vector<std::vector<Vector2>> innerSurface;
 };
 
 #endif

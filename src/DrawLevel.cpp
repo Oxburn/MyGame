@@ -6,14 +6,14 @@
 #include <cmath>
 
 
-std::vector<std::vector<Vector2>> curveParallel (const std::vector<Vector2>& points, float distance)
+std::vector<std::vector<Vector2>> CurveParallel (const std::vector<Vector2>& boundaryPoints, float distance)
 {
     std::vector<std::vector<Vector2>> parallelCurves;
 
-    for (size_t i = 0; i < points.size() - 1; i++)
+    for (size_t i = 0; i < boundaryPoints.size() - 1; i++)
     {
-        Vector2 A = points[i];
-        Vector2 B = points[(i + 1) % points.size()];
+        Vector2 A = boundaryPoints[i];
+        Vector2 B = boundaryPoints[(i + 1) % boundaryPoints.size()];
 
         // Direction du segment
         Vector2 AB = Vector2Subtract(B, A);
@@ -79,8 +79,10 @@ bool SegmentTouchesTriangle(Vector2 A, Vector2 B, Vector2 C, Vector2 D, Vector2 
     return false; // Aucun contact
 }
 
-void DrawSurface(const std::vector<Vector2>& boundaryPoints, std::vector<std::vector<Vector2>> parallelCurve, Color surfaceColor)
+std::vector<std::vector<Vector2>> SurfaceInner(const std::vector<Vector2>& boundaryPoints, std::vector<std::vector<Vector2>>& parallelCurve)
 {
+    std::vector<std::vector<Vector2>> innerSurface;
+
     for (size_t i = 0; i < boundaryPoints.size() - 1; i++)
     {
         Vector2 A = boundaryPoints[i];
@@ -96,18 +98,6 @@ void DrawSurface(const std::vector<Vector2>& boundaryPoints, std::vector<std::ve
                 {
                     Vector2 D = parallelPoints[0];
                     Vector2 E = parallelPoints[1];
-
-                    Vector2 drawD = {
-                        (float)(D.x * GLOBAL_RENDER_WIDTH / 100),
-                        (float)(D.y * GLOBAL_RENDER_HEIGHT / 100)
-                    };
-                    Vector2 drawE = {
-                        (float)(E.x * GLOBAL_RENDER_WIDTH / 100),
-                        (float)(E.y * GLOBAL_RENDER_HEIGHT / 100)
-                    };
-
-                    DrawLineEx(drawD, drawE, 1.0f, RED); // Affichage des courbes parallèles (pour debug)
-
                     if (SegmentTouchesTriangle(A, B, C, D, E))
                     {
                         contact = true;
@@ -117,23 +107,13 @@ void DrawSurface(const std::vector<Vector2>& boundaryPoints, std::vector<std::ve
 
                 if (!contact)
                 {
-                    Vector2 drawA = {
-                        (float)(A.x * GLOBAL_RENDER_WIDTH / 100),
-                        (float)(A.y * GLOBAL_RENDER_HEIGHT / 100)
-                    };
-                    Vector2 drawB {
-                        (float)(B.x * GLOBAL_RENDER_WIDTH / 100),
-                        (float)(B.y * GLOBAL_RENDER_HEIGHT / 100)
-                    };
-                    Vector2 drawC = {
-                        (float)(C.x * GLOBAL_RENDER_WIDTH / 100),
-                        (float)(C.y * GLOBAL_RENDER_HEIGHT / 100)
-                    };
-                    DrawTriangle(drawA, drawB, drawC, surfaceColor);
+                    innerSurface.push_back({A, B, C});
                 }
             }
         }
     }
+
+    return innerSurface;
 }
 
 
@@ -144,6 +124,7 @@ void DrawLevel(LEVEL_DEFINITION levelDefinition)
     Color boundaryColor = levelDefinition.boundaryColor;
     Color surfaceColor = levelDefinition.surfaceColor;
     std::vector<std::vector<Vector2>> parallelCurve = levelDefinition.parallelCurve;
+    std::vector<std::vector<Vector2>> innerSurface = levelDefinition.innerSurface;
 
     if (boundaryPoints.size() < 2) return;
 
@@ -152,19 +133,53 @@ void DrawLevel(LEVEL_DEFINITION levelDefinition)
 
     for (size_t i = 0; i < boundaryPoints.size() - 1; i++)
     {
-        Vector2 startPt = {
+        Vector2 A = {
             (float)(boundaryPoints[i].x * GLOBAL_RENDER_WIDTH / 100),
             (float)(boundaryPoints[i].y * GLOBAL_RENDER_HEIGHT / 100),
         };
-        Vector2 endtPt = {
+        Vector2 B = {
             (float)(boundaryPoints[i + 1].x * GLOBAL_RENDER_WIDTH / 100),
             (float)(boundaryPoints[i + 1].y * GLOBAL_RENDER_HEIGHT / 100),
         };
-        DrawLineEx(startPt, endtPt, boundaryThickness, boundaryColor);
+
+        DrawLineEx(A, B, boundaryThickness, boundaryColor);
     }
 
 
+    // ---- Création des parallèles (debug?) ----
+
+    for (const auto& parallelLine : parallelCurve)
+    {
+        Vector2 A = {
+            (float)(parallelLine[0].x * GLOBAL_RENDER_WIDTH / 100),
+            (float)(parallelLine[0].y * GLOBAL_RENDER_HEIGHT / 100)
+        };
+        Vector2 B = {
+            (float)(parallelLine[1].x * GLOBAL_RENDER_WIDTH / 100),
+            (float)(parallelLine[1].y * GLOBAL_RENDER_HEIGHT / 100)
+        };
+
+        DrawLineEx(A, B, 1.0f, RED);
+    }
+
     // ---- Création des surfaces ----
 
-    DrawSurface(boundaryPoints, parallelCurve, surfaceColor);
+    for (const auto& innerTriangle : innerSurface)
+    {
+        Vector2 A = {
+            (float)(innerTriangle[0].x * GLOBAL_RENDER_WIDTH / 100),
+            (float)(innerTriangle[0].y * GLOBAL_RENDER_HEIGHT / 100)
+        };
+        Vector2 B = {
+            (float)(innerTriangle[1].x * GLOBAL_RENDER_WIDTH / 100),
+            (float)(innerTriangle[1].y * GLOBAL_RENDER_HEIGHT / 100)
+        };
+        Vector2 C = {
+            (float)(innerTriangle[2].x * GLOBAL_RENDER_WIDTH / 100),
+            (float)(innerTriangle[2].y * GLOBAL_RENDER_HEIGHT / 100)
+        };
+
+        DrawTriangle(A, B, C, surfaceColor);
+    }
+    //DrawSurface(boundaryPoints, parallelCurve, surfaceColor);
 }
