@@ -7,8 +7,6 @@
 #include <cmath>
 #include <algorithm> 
 
-#include <iostream>
-
 
 // Paramètres
 float GLOBAL_MAX_SPEED = 3.0f;
@@ -16,6 +14,8 @@ float GLOBAL_HERO_ACCELERATION = 0.5f;
 float GLOBAL_HERO_BOUNCE = 1.0f;      // Ecrasement du héros (0.5 -> Très écrasé / 5.0f -> Peu écrasé)
 Vector2 GLOBAL_GRAVITY_FORCE = {0.0f, 7.0f};
 float GLOBAL_JUMP_POWER = 15.0f; // 8.0f (un peu plus que la gravité) -> Saut minimal
+Vector2 NO_GLITCH_POINT = {0, 0}; //
+bool GLOBAL_HERO_GLITCHED = false;
 
 float IntersectSegmentsDistance(Vector2 p1, Vector2 p2, Vector2 p3, Vector2 p4)
 {
@@ -44,6 +44,46 @@ float IntersectSegmentsDistance(Vector2 p1, Vector2 p2, Vector2 p3, Vector2 p4)
     }
 
     return GLOBAL_HERO_RADIUS; // pas d’intersection
+}
+
+bool IsPointInsideTriangle(Vector2 p, Vector2 a, Vector2 b, Vector2 c)
+{
+    float areaOrig = fabsf((b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y));
+    float area1 = fabsf((a.x - p.x) * (b.y - p.y) - (b.x - p.x) * (a.y - p.y));
+    float area2 = fabsf((b.x - p.x) * (c.y - p.y) - (c.x - p.x) * (b.y - p.y));
+    float area3 = fabsf((c.x - p.x) * (a.y - p.y) - (a.x - p.x) * (c.y - p.y));
+    float sum = area1 + area2 + area3;
+
+    return fabsf(sum - areaOrig) < 0.01f; // tolérance flottante
+}
+
+Vector2 ClosestPointOnBoundary(Vector2 p, const std::vector<Vector2>& boundaryPoints)
+{
+    float minDist = 1e6;
+    Vector2 unglitchedPos = NO_GLITCH_POINT;
+
+    for (size_t i = 0; i < boundaryPoints.size() - 1; i++)
+    {
+        Vector2 A = boundaryPoints[i];
+        Vector2 B = boundaryPoints[i + 1];
+        Vector2 AB = Vector2Subtract(B, A);
+        float l2 = Vector2LengthSqr(AB);
+
+        // Projection du point p sur le segment [A, B]
+        float t = fmaxf(0.0f, fminf(1.0f, Vector2DotProduct(Vector2Subtract(p, A), AB) / l2));
+        Vector2 projection = { A.x + t * AB.x, A.y + t * AB.y };
+
+        // Distance au segment
+        float dist = Vector2Distance(p, projection);
+
+        if (dist < minDist)
+        {
+            minDist = dist;
+            unglitchedPos = projection;
+        }
+    }
+
+    return unglitchedPos;
 }
 
 std::vector<Vector2> GetProximity(const std::vector<LEVEL_DEFINITION>& levelDefinitions)
@@ -99,9 +139,10 @@ std::vector<Vector2> GetProximity(const std::vector<LEVEL_DEFINITION>& levelDefi
 
 Vector2 ComputeForces(std::vector<Vector2> proximityData)
 {
-    // ---- Pour rassembler les forces et faire le bilan ----
+    // ---- Force de gravité ----
 
-    std::vector<Vector2> forces = {GLOBAL_GRAVITY_FORCE};
+    std::vector<Vector2> forces;
+    //forces.push_back(GLOBAL_GRAVITY_FORCE);
 
 
     // ---- Forces de réaction ----
@@ -124,11 +165,9 @@ Vector2 ComputeForces(std::vector<Vector2> proximityData)
     }
 
 
-    
-
     // ---- Forces du saut (proportionnelles aux Forces de réaction !) ----
 
-    if (IsKeyPressed(KEY_S))
+    if (IsKeyPressed(KEY_S) and !(GLOBAL_HERO_GLITCHED))
     {
         GLOBAL_JUMP_CLICK_START_TIME = GetTime();
         GLOBAL_JUMP_IS_PRESSED = true;
@@ -274,6 +313,8 @@ void DrawHero(std::vector<LEVEL_DEFINITION>& levelDefinitions)
     // ---- Dessin du héros ----
 
     std::vector<Vector2> proximityData = GetProximity(levelDefinitions);
+    int sideContact = 1;
+    float contactDistance = GLOBAL_HERO_RADIUS;
 
     for (size_t i = 0; i < proximityData.size(); i++)
     {
@@ -287,6 +328,20 @@ void DrawHero(std::vector<LEVEL_DEFINITION>& levelDefinitions)
         float startPtY = GLOBAL_HERO_POS.y + startDistance * sinf(startAngle);
         float endPtX = GLOBAL_HERO_POS.x + endDistance * cosf(endAngle);
         float endPtY = GLOBAL_HERO_POS.y + endDistance * sinf(endAngle);
+
+        if (startDistance < contactDistance)
+        {
+            contactDistance = startDistance;
+            if (startDistance * cosf(startAngle) < startDistance * sinf(startAngle))
+            {
+                sideContact = 1;
+            }
+            else
+            {
+                sideContact = -1;
+            }
+
+        }
 
         startPtX = GLOBAL_HERO_POS.x + (startPtX - GLOBAL_HERO_POS.x) / WINDOW_RATIO;
         endPtX = GLOBAL_HERO_POS.x + (endPtX - GLOBAL_HERO_POS.x) / WINDOW_RATIO;
@@ -324,17 +379,53 @@ void DrawHero(std::vector<LEVEL_DEFINITION>& levelDefinitions)
 
     // ---- Animation du héros ----
 
-    // Translation
+    // Physique (forces, vitesse)
     GLOBAL_HERO_POS.x += GLOBAL_HERO_VELOCITY.x;
     GLOBAL_HERO_POS.y += GLOBAL_HERO_VELOCITY.y;
 
-    // Rotation
-    if (IsKeyDown(KEY_RIGHT))
+    // Corriger si pénétration
+    GLOBAL_HERO_GLITCHED = false;
+    for (const auto& levelDefinition : levelDefinitions)
     {
-        GLOBAL_HERO_ROTATION += 5.0f;
+        for (const auto& innerTriangle : levelDefinition.innerSurface)
+        {
+            Vector2 A = innerTriangle[0];
+            Vector2 B = innerTriangle[1];
+            Vector2 C = innerTriangle[2];
+
+            if (IsPointInsideTriangle(GLOBAL_HERO_POS, A, B, C))
+            {
+                GLOBAL_HERO_GLITCHED = true;
+                float triangleArea = 0.5f * fabsf((B.x - A.x) * (C.y - A.y) - (B.y - A.y) * (C.x - A.x));
+                if (triangleArea > 0.01f)
+                {
+                    std::vector<Vector2> boundaryPoints = levelDefinition.boundaryPoints;
+                    Vector2 unglitchedPos = ClosestPointOnBoundary(GLOBAL_HERO_POS, boundaryPoints);
+
+                    if (!(unglitchedPos == NO_GLITCH_POINT))
+                    {
+                        Vector2 dir = Vector2Normalize(Vector2Subtract(unglitchedPos, GLOBAL_HERO_POS));
+                        unglitchedPos = Vector2Add(unglitchedPos, Vector2Scale(dir, 1.0f));
+                        TraceLog(LOG_WARNING, "GLITCH !!! %.2f", triangleArea);
+                        DrawCircle(
+                            unglitchedPos.x * GLOBAL_RENDER_WIDTH / 100,
+                            unglitchedPos.y * GLOBAL_RENDER_HEIGHT / 100,
+                            10.0f, YELLOW);
+                        GLOBAL_HERO_POS = unglitchedPos;
+                    }
+                }
+            }
+        }
     }
-    if (IsKeyDown(KEY_LEFT))
+
+
+    // Rotation
+    if (IsKeyDown(KEY_RIGHT) or IsKeyDown(KEY_DOWN))
     {
-        GLOBAL_HERO_ROTATION -= 5.0f;
+        GLOBAL_HERO_ROTATION += sideContact * contactDistance * 5.0f;
+    }
+    if (IsKeyDown(KEY_LEFT) or IsKeyDown(KEY_UP))
+    {
+        GLOBAL_HERO_ROTATION -= sideContact * contactDistance * 5.0f;
     }
 }

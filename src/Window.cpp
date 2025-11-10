@@ -80,7 +80,7 @@ void Window() {
     GLOBAL_HERO_PREVIOUS_TIME = GetTime();
     GLOBAL_HERO_RADIUS = 2.0f;
     //GLOBAL_HERO_POS = {52, 0};
-    GLOBAL_HERO_POS = {20.0f, 80.0f};
+    GLOBAL_HERO_POS = {20.0f, 72.0f};
     GLOBAL_HERO_MOVE = {0.0f, 0.0f};
     GLOBAL_HERO_VELOCITY = {0.0f, 0.0f};
     GLOBAL_HERO_ROTATION = 0.0f;
