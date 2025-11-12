@@ -2,10 +2,10 @@
 #include "raymath.h"
 #include "Variables.h"
 #include "RenderUtils.h"
-#include "PointsHero.h"
 #include <vector>
 #include <cmath>
 #include <algorithm> 
+#include <numeric>
 
 
 // Paramètres
@@ -16,6 +16,37 @@ Vector2 GLOBAL_GRAVITY_FORCE = {0.0f, 7.0f};
 float GLOBAL_JUMP_POWER = 15.0f; // 8.0f (un peu plus que la gravité) -> Saut minimal
 Vector2 NO_GLITCH_POINT = {0, 0}; //
 bool GLOBAL_HERO_GLITCHED = false;
+int GLOBAL_HERO_ACCURACY = 50;      // Finesse de représentation du héros
+
+
+std::vector<std::pair<float, Vector2>> PointsHero()
+{
+    // ---- Liste à remplir des points de passage du personnage ----
+
+    std::vector<std::pair<float, Vector2>> points;
+
+
+    // ---- Boucle ----
+
+    for (int i = 0; i < GLOBAL_HERO_ACCURACY; i++)
+    {
+        // ---- Angle fonction de la rotation courante du personnage ----
+
+        float angle = (2.0f * PI * i + GLOBAL_HERO_ROTATION) / GLOBAL_HERO_ACCURACY;
+
+
+        // ---- Forme de base = cercle avec respect du ratio ----
+
+        float posX = GLOBAL_HERO_POS.x + GLOBAL_HERO_RADIUS * cosf(angle);
+        posX = GLOBAL_HERO_POS.x + (posX - GLOBAL_HERO_POS.x) / WINDOW_RATIO;
+        float posY = GLOBAL_HERO_POS.y + GLOBAL_HERO_RADIUS * sinf(angle);
+        Vector2 point = { posX, posY };
+
+        points.push_back( {angle, point} );
+    }
+
+    return points;
+}
 
 float IntersectSegmentsDistance(Vector2 p1, Vector2 p2, Vector2 p3, Vector2 p4)
 {
@@ -139,14 +170,9 @@ std::vector<Vector2> GetProximity(const std::vector<LEVEL_DEFINITION>& levelDefi
 
 Vector2 ComputeForces(std::vector<Vector2> proximityData)
 {
-    // ---- Force de gravité ----
-
-    std::vector<Vector2> forces;
-    //forces.push_back(GLOBAL_GRAVITY_FORCE);
-
-
     // ---- Forces de réaction ----
 
+    std::vector<Vector2> reactionForces;
     for (size_t i = 0; i < proximityData.size(); i++)
     {
         float angle = proximityData[i].x;
@@ -160,49 +186,102 @@ Vector2 ComputeForces(std::vector<Vector2> proximityData)
             float reactionForceX = totalForce * cos(angle + PI);
             float reactionForceY = totalForce * sin(angle + PI);
             Vector2 reactionForce = {reactionForceX, reactionForceY};
-            forces.push_back(reactionForce);
+            reactionForces.push_back(reactionForce);
         }
     }
 
 
     // ---- Forces du saut (proportionnelles aux Forces de réaction !) ----
 
-    if (IsKeyPressed(KEY_S) and !(GLOBAL_HERO_GLITCHED))
+    std::vector<Vector2> jumpForces;
+    if (!reactionForces.empty())
     {
-        GLOBAL_JUMP_CLICK_START_TIME = GetTime();
-        GLOBAL_JUMP_IS_PRESSED = true;
-    }
-    if (GLOBAL_JUMP_IS_PRESSED && IsKeyDown(KEY_S))
-    {
-        double duration = GetTime() - GLOBAL_JUMP_CLICK_START_TIME;
-        duration = std::min(duration, GLOBAL_JUMP_MAX_TIME);
-
-        float sumY = -1.0f;
-        std::vector<Vector2> newForces;
-        for (size_t i = 1; i < forces.size() - 1; i++)
+        if (IsKeyPressed(KEY_S) and !(GLOBAL_HERO_GLITCHED))
         {
-            Vector2 reactionForce = forces[i];
-            newForces.push_back(reactionForce);
-            sumY += reactionForce.y;
+            GLOBAL_JUMP_CLICK_START_TIME = GetTime();
+            GLOBAL_JUMP_IS_PRESSED = true;
         }
-
-        float jumpCoef = GLOBAL_JUMP_POWER * GLOBAL_JUMP_POWER / (std::pow(duration + 1.0f, 10.0f)) / -sumY;
-        jumpCoef = std::min(jumpCoef, GLOBAL_JUMP_POWER);
-
-        for (const auto& newForce: newForces)
+        if (GLOBAL_JUMP_IS_PRESSED && IsKeyDown(KEY_S))
         {
-            Vector2 jumpForce =
+            double duration = GetTime() - GLOBAL_JUMP_CLICK_START_TIME;
+            duration = std::min(duration, GLOBAL_JUMP_MAX_TIME);
+
+            float sumY = -1.0f;
+            std::vector<Vector2> newForces;
+            for (size_t i = 0; i < reactionForces.size() - 1; i++)
             {
-                (float)(jumpCoef * newForce.x),
-                (float)(jumpCoef * newForce.y)
-            };
-            forces.push_back(jumpForce);
+                Vector2 reactionForce = reactionForces[i];
+                newForces.push_back(reactionForce);
+                sumY += reactionForce.y;
+            }
+
+            float jumpCoef = GLOBAL_JUMP_POWER * GLOBAL_JUMP_POWER / (std::pow(duration + 1.0f, 10.0f)) / -sumY;
+            jumpCoef = std::min(jumpCoef, GLOBAL_JUMP_POWER);
+
+            for (const auto& newForce: newForces)
+            {
+                Vector2 jumpForce =
+                {
+                    (float)(jumpCoef * newForce.x),
+                    (float)(jumpCoef * newForce.y)
+                };
+                jumpForces.push_back(jumpForce);
+            }
         }
     }
+
+
+    // ---- Force de gravité ----
+
+    std::vector<Vector2> gravityForces;
+    gravityForces.push_back(GLOBAL_GRAVITY_FORCE);
     
+    
+    // ---- Force de colle (? Transformation des forces de réaction / gravité ?) ----
+    
+    bool GLOBAL_HERO_CAN_STICK = true;
+    std::vector<Vector2> stickForces;
+    if (GLOBAL_HERO_CAN_STICK)
+    {
+        float sumX = 0.0f;
+        float sumY = 0.0f;
+        for (const auto& reactionForce : reactionForces)
+        {
+            float forceX = reactionForce.x;
+            float forceY = reactionForce.y;
+
+            sumX += forceX;
+            sumY += forceY;
+        }
+
+        if (std::abs(sumX) > 1.0f  or sumY > 1.0f)
+        {
+            GLOBAL_START_STICK = true;
+            TraceLog(LOG_NONE, "Doit coller ! %.2f", sumY);
+        }
+        else
+        {
+            GLOBAL_START_STICK = false;
+            TraceLog(LOG_NONE, "Ne doit plus coller !");
+        }
+        
+        if (GLOBAL_START_STICK)
+        {
+            gravityForces.clear();
+
+            for (const auto& reactionForce : reactionForces)
+            {
+                float stickForceY = -reactionForce.y;
+
+                stickForces.push_back({0.0f, stickForceY});
+            }
+        }
+    }
+
 
     // ---- Forces de déplacement ----
 
+    std::vector<Vector2> moveForces;
     if (IsKeyDown(KEY_RIGHT) && GLOBAL_HERO_MOVE.x < GLOBAL_MAX_SPEED)
     {
         GLOBAL_HERO_MOVE.x += GLOBAL_HERO_ACCELERATION;
@@ -228,12 +307,36 @@ Vector2 ComputeForces(std::vector<Vector2> proximityData)
     {
         GLOBAL_HERO_MOVE.y = 0.0f;
     }
+    moveForces.push_back(GLOBAL_HERO_MOVE);
 
-    forces.push_back(GLOBAL_HERO_MOVE);
 
+    // ---- Bilan des forces ----
 
-    // ---- Force de frottements ----
+    std::vector<std::vector<Vector2>> allForces = {
+        reactionForces,
+        jumpForces,
+        gravityForces,
+        stickForces,
+        moveForces
+    };
+    
+    std::vector<Vector2> forces;
+    forces.reserve(
+        std::accumulate(allForces.begin(), allForces.end(), 0u,
+            [](size_t sum, const std::vector<Vector2>& v) { return sum + v.size(); })
+    );
 
+    for (const auto& vec : allForces) {
+        forces.insert(forces.end(), vec.begin(), vec.end());
+    }
+
+    float totalForceX = 0.0f;
+    float totalForceY = 0.0f;
+    for (const auto& force : forces)
+    {
+        totalForceX += force.x;
+        totalForceY += force.y;
+    }
 
 
     // ---- Dessin des vecteurs de force (à supprimer à termes ?) ----
@@ -293,16 +396,6 @@ Vector2 ComputeForces(std::vector<Vector2> proximityData)
         DrawLineEx(end, right, 1.0f, RED);
     }
 
-
-    // ---- Bilan des forces ----
-
-    float totalForceX = 0.0f;
-    float totalForceY = 0.0f;
-    for (const auto& force : forces)
-    {
-        totalForceX += force.x;
-        totalForceY += force.y;
-    }
 
     return {totalForceX, totalForceY};
 }
@@ -406,7 +499,6 @@ void DrawHero(std::vector<LEVEL_DEFINITION>& levelDefinitions)
                     {
                         Vector2 dir = Vector2Normalize(Vector2Subtract(unglitchedPos, GLOBAL_HERO_POS));
                         unglitchedPos = Vector2Add(unglitchedPos, Vector2Scale(dir, 1.0f));
-                        TraceLog(LOG_WARNING, "GLITCH !!! %.2f", triangleArea);
                         DrawCircle(
                             unglitchedPos.x * GLOBAL_RENDER_WIDTH / 100,
                             unglitchedPos.y * GLOBAL_RENDER_HEIGHT / 100,

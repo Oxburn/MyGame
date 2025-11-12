@@ -34,6 +34,9 @@ extern Vector2 GLOBAL_HERO_MOVE;
 extern Vector2 GLOBAL_HERO_VELOCITY;
 extern float GLOBAL_HERO_ROTATION;
 
+extern double GLOBAL_GRAVITY_DELAY;         // Pour pysique colle ??
+extern bool GLOBAL_START_STICK;
+
 // Clic saut
 extern double GLOBAL_JUMP_CLICK_START_TIME;
 extern bool GLOBAL_JUMP_IS_PRESSED;
@@ -41,7 +44,7 @@ extern bool GLOBAL_JUMP_IS_RELEASED;
 extern double GLOBAL_JUMP_MAX_TIME;
 
 // Qualité
-constexpr float WINDOW_BASE_WIDTH_RATIO = 0.5;
+constexpr float WINDOW_BASE_WIDTH_RATIO = /*0.5*/ 0.5f;
 constexpr float WINDOW_RATIO = 16.0f / 9.0f;
 constexpr const  char* WINDOW_NAME = "MyGame";
 constexpr int WINDOW_FRAMERATE = 60;
@@ -58,7 +61,7 @@ constexpr Color DIRT_COLOR = {95, 69, 48, 255};
 
 // Epaisseurs
 constexpr float HERO_THICKNESS = 4.0f;
-constexpr float MOSS_THICKNESS = 5.0f;
+constexpr float MOSS_THICKNESS = 6.0f;
 constexpr float GRASS_THICKNESS = 2.0f;
 
 // Texte

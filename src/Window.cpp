@@ -80,11 +80,14 @@ void Window() {
     GLOBAL_HERO_PREVIOUS_TIME = GetTime();
     GLOBAL_HERO_RADIUS = 2.0f;
     //GLOBAL_HERO_POS = {52, 0};
-    GLOBAL_HERO_POS = {20.0f, 72.0f};
+    GLOBAL_HERO_POS = {20.0f, 71.0f};
     GLOBAL_HERO_MOVE = {0.0f, 0.0f};
     GLOBAL_HERO_VELOCITY = {0.0f, 0.0f};
     GLOBAL_HERO_ROTATION = 0.0f;
 
+    GLOBAL_GRAVITY_DELAY = 0.0;
+    GLOBAL_START_STICK = false;
+    
     // Clic saut
     GLOBAL_JUMP_CLICK_START_TIME = 0.0;
     GLOBAL_JUMP_IS_PRESSED = false;

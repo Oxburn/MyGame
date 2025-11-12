@@ -272,30 +272,6 @@ src/OptionsScreen.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\raylib_game.dir\build.make CMakeFiles/raylib_game.dir/src/OptionsScreen.cpp.s
 .PHONY : src/OptionsScreen.cpp.s
 
-src/PointsHero.obj: src/PointsHero.cpp.obj
-.PHONY : src/PointsHero.obj
-
-# target to build an object file
-src/PointsHero.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\raylib_game.dir\build.make CMakeFiles/raylib_game.dir/src/PointsHero.cpp.obj
-.PHONY : src/PointsHero.cpp.obj
-
-src/PointsHero.i: src/PointsHero.cpp.i
-.PHONY : src/PointsHero.i
-
-# target to preprocess a source file
-src/PointsHero.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\raylib_game.dir\build.make CMakeFiles/raylib_game.dir/src/PointsHero.cpp.i
-.PHONY : src/PointsHero.cpp.i
-
-src/PointsHero.s: src/PointsHero.cpp.s
-.PHONY : src/PointsHero.s
-
-# target to generate assembly for a file
-src/PointsHero.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\raylib_game.dir\build.make CMakeFiles/raylib_game.dir/src/PointsHero.cpp.s
-.PHONY : src/PointsHero.cpp.s
-
 src/RenderUtils.obj: src/RenderUtils.cpp.obj
 .PHONY : src/RenderUtils.obj
 
@@ -443,9 +419,6 @@ help:
 	@echo ... src/OptionsScreen.obj
 	@echo ... src/OptionsScreen.i
 	@echo ... src/OptionsScreen.s
-	@echo ... src/PointsHero.obj
-	@echo ... src/PointsHero.i
-	@echo ... src/PointsHero.s
 	@echo ... src/RenderUtils.obj
 	@echo ... src/RenderUtils.i
 	@echo ... src/RenderUtils.s

@@ -14,7 +14,6 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "C:/Users/bruno.richardon/Desktop/Projets/MyGame/src/Level1_Screen1.cpp" "CMakeFiles/raylib_game.dir/src/Level1_Screen1.cpp.obj" "gcc" "CMakeFiles/raylib_game.dir/src/Level1_Screen1.cpp.obj.d"
   "C:/Users/bruno.richardon/Desktop/Projets/MyGame/src/Level1_Screen2.cpp" "CMakeFiles/raylib_game.dir/src/Level1_Screen2.cpp.obj" "gcc" "CMakeFiles/raylib_game.dir/src/Level1_Screen2.cpp.obj.d"
   "C:/Users/bruno.richardon/Desktop/Projets/MyGame/src/OptionsScreen.cpp" "CMakeFiles/raylib_game.dir/src/OptionsScreen.cpp.obj" "gcc" "CMakeFiles/raylib_game.dir/src/OptionsScreen.cpp.obj.d"
-  "C:/Users/bruno.richardon/Desktop/Projets/MyGame/src/PointsHero.cpp" "CMakeFiles/raylib_game.dir/src/PointsHero.cpp.obj" "gcc" "CMakeFiles/raylib_game.dir/src/PointsHero.cpp.obj.d"
   "C:/Users/bruno.richardon/Desktop/Projets/MyGame/src/RenderUtils.cpp" "CMakeFiles/raylib_game.dir/src/RenderUtils.cpp.obj" "gcc" "CMakeFiles/raylib_game.dir/src/RenderUtils.cpp.obj.d"
   "C:/Users/bruno.richardon/Desktop/Projets/MyGame/src/StartScreen.cpp" "CMakeFiles/raylib_game.dir/src/StartScreen.cpp.obj" "gcc" "CMakeFiles/raylib_game.dir/src/StartScreen.cpp.obj.d"
   "C:/Users/bruno.richardon/Desktop/Projets/MyGame/src/Variables.cpp" "CMakeFiles/raylib_game.dir/src/Variables.cpp.obj" "gcc" "CMakeFiles/raylib_game.dir/src/Variables.cpp.obj.d"

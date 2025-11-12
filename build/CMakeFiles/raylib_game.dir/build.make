@@ -161,26 +161,11 @@ CMakeFiles/raylib_game.dir/src/OptionsScreen.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/raylib_game.dir/src/OptionsScreen.cpp.s"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\bruno.richardon\Desktop\Projets\MyGame\src\OptionsScreen.cpp -o CMakeFiles\raylib_game.dir\src\OptionsScreen.cpp.s
 
-CMakeFiles/raylib_game.dir/src/PointsHero.cpp.obj: CMakeFiles/raylib_game.dir/flags.make
-CMakeFiles/raylib_game.dir/src/PointsHero.cpp.obj: CMakeFiles/raylib_game.dir/includes_CXX.rsp
-CMakeFiles/raylib_game.dir/src/PointsHero.cpp.obj: C:/Users/bruno.richardon/Desktop/Projets/MyGame/src/PointsHero.cpp
-CMakeFiles/raylib_game.dir/src/PointsHero.cpp.obj: CMakeFiles/raylib_game.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\bruno.richardon\Desktop\Projets\MyGame\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/raylib_game.dir/src/PointsHero.cpp.obj"
-	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/raylib_game.dir/src/PointsHero.cpp.obj -MF CMakeFiles\raylib_game.dir\src\PointsHero.cpp.obj.d -o CMakeFiles\raylib_game.dir\src\PointsHero.cpp.obj -c C:\Users\bruno.richardon\Desktop\Projets\MyGame\src\PointsHero.cpp
-
-CMakeFiles/raylib_game.dir/src/PointsHero.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/raylib_game.dir/src/PointsHero.cpp.i"
-	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\bruno.richardon\Desktop\Projets\MyGame\src\PointsHero.cpp > CMakeFiles\raylib_game.dir\src\PointsHero.cpp.i
-
-CMakeFiles/raylib_game.dir/src/PointsHero.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/raylib_game.dir/src/PointsHero.cpp.s"
-	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\bruno.richardon\Desktop\Projets\MyGame\src\PointsHero.cpp -o CMakeFiles\raylib_game.dir\src\PointsHero.cpp.s
-
 CMakeFiles/raylib_game.dir/src/RenderUtils.cpp.obj: CMakeFiles/raylib_game.dir/flags.make
 CMakeFiles/raylib_game.dir/src/RenderUtils.cpp.obj: CMakeFiles/raylib_game.dir/includes_CXX.rsp
 CMakeFiles/raylib_game.dir/src/RenderUtils.cpp.obj: C:/Users/bruno.richardon/Desktop/Projets/MyGame/src/RenderUtils.cpp
 CMakeFiles/raylib_game.dir/src/RenderUtils.cpp.obj: CMakeFiles/raylib_game.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\bruno.richardon\Desktop\Projets\MyGame\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/raylib_game.dir/src/RenderUtils.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\bruno.richardon\Desktop\Projets\MyGame\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/raylib_game.dir/src/RenderUtils.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/raylib_game.dir/src/RenderUtils.cpp.obj -MF CMakeFiles\raylib_game.dir\src\RenderUtils.cpp.obj.d -o CMakeFiles\raylib_game.dir\src\RenderUtils.cpp.obj -c C:\Users\bruno.richardon\Desktop\Projets\MyGame\src\RenderUtils.cpp
 
 CMakeFiles/raylib_game.dir/src/RenderUtils.cpp.i: cmake_force
@@ -195,7 +180,7 @@ CMakeFiles/raylib_game.dir/src/StartScreen.cpp.obj: CMakeFiles/raylib_game.dir/f
 CMakeFiles/raylib_game.dir/src/StartScreen.cpp.obj: CMakeFiles/raylib_game.dir/includes_CXX.rsp
 CMakeFiles/raylib_game.dir/src/StartScreen.cpp.obj: C:/Users/bruno.richardon/Desktop/Projets/MyGame/src/StartScreen.cpp
 CMakeFiles/raylib_game.dir/src/StartScreen.cpp.obj: CMakeFiles/raylib_game.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\bruno.richardon\Desktop\Projets\MyGame\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/raylib_game.dir/src/StartScreen.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\bruno.richardon\Desktop\Projets\MyGame\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/raylib_game.dir/src/StartScreen.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/raylib_game.dir/src/StartScreen.cpp.obj -MF CMakeFiles\raylib_game.dir\src\StartScreen.cpp.obj.d -o CMakeFiles\raylib_game.dir\src\StartScreen.cpp.obj -c C:\Users\bruno.richardon\Desktop\Projets\MyGame\src\StartScreen.cpp
 
 CMakeFiles/raylib_game.dir/src/StartScreen.cpp.i: cmake_force
@@ -210,7 +195,7 @@ CMakeFiles/raylib_game.dir/src/Variables.cpp.obj: CMakeFiles/raylib_game.dir/fla
 CMakeFiles/raylib_game.dir/src/Variables.cpp.obj: CMakeFiles/raylib_game.dir/includes_CXX.rsp
 CMakeFiles/raylib_game.dir/src/Variables.cpp.obj: C:/Users/bruno.richardon/Desktop/Projets/MyGame/src/Variables.cpp
 CMakeFiles/raylib_game.dir/src/Variables.cpp.obj: CMakeFiles/raylib_game.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\bruno.richardon\Desktop\Projets\MyGame\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/raylib_game.dir/src/Variables.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\bruno.richardon\Desktop\Projets\MyGame\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/raylib_game.dir/src/Variables.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/raylib_game.dir/src/Variables.cpp.obj -MF CMakeFiles\raylib_game.dir\src\Variables.cpp.obj.d -o CMakeFiles\raylib_game.dir\src\Variables.cpp.obj -c C:\Users\bruno.richardon\Desktop\Projets\MyGame\src\Variables.cpp
 
 CMakeFiles/raylib_game.dir/src/Variables.cpp.i: cmake_force
@@ -225,7 +210,7 @@ CMakeFiles/raylib_game.dir/src/Window.cpp.obj: CMakeFiles/raylib_game.dir/flags.
 CMakeFiles/raylib_game.dir/src/Window.cpp.obj: CMakeFiles/raylib_game.dir/includes_CXX.rsp
 CMakeFiles/raylib_game.dir/src/Window.cpp.obj: C:/Users/bruno.richardon/Desktop/Projets/MyGame/src/Window.cpp
 CMakeFiles/raylib_game.dir/src/Window.cpp.obj: CMakeFiles/raylib_game.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\bruno.richardon\Desktop\Projets\MyGame\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/raylib_game.dir/src/Window.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\bruno.richardon\Desktop\Projets\MyGame\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/raylib_game.dir/src/Window.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/raylib_game.dir/src/Window.cpp.obj -MF CMakeFiles\raylib_game.dir\src\Window.cpp.obj.d -o CMakeFiles\raylib_game.dir\src\Window.cpp.obj -c C:\Users\bruno.richardon\Desktop\Projets\MyGame\src\Window.cpp
 
 CMakeFiles/raylib_game.dir/src/Window.cpp.i: cmake_force
@@ -240,7 +225,7 @@ CMakeFiles/raylib_game.dir/src/main.cpp.obj: CMakeFiles/raylib_game.dir/flags.ma
 CMakeFiles/raylib_game.dir/src/main.cpp.obj: CMakeFiles/raylib_game.dir/includes_CXX.rsp
 CMakeFiles/raylib_game.dir/src/main.cpp.obj: C:/Users/bruno.richardon/Desktop/Projets/MyGame/src/main.cpp
 CMakeFiles/raylib_game.dir/src/main.cpp.obj: CMakeFiles/raylib_game.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\bruno.richardon\Desktop\Projets\MyGame\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/raylib_game.dir/src/main.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\bruno.richardon\Desktop\Projets\MyGame\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/raylib_game.dir/src/main.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/raylib_game.dir/src/main.cpp.obj -MF CMakeFiles\raylib_game.dir\src\main.cpp.obj.d -o CMakeFiles\raylib_game.dir\src\main.cpp.obj -c C:\Users\bruno.richardon\Desktop\Projets\MyGame\src\main.cpp
 
 CMakeFiles/raylib_game.dir/src/main.cpp.i: cmake_force
@@ -259,7 +244,6 @@ raylib_game_OBJECTS = \
 "CMakeFiles/raylib_game.dir/src/Level1_Screen1.cpp.obj" \
 "CMakeFiles/raylib_game.dir/src/Level1_Screen2.cpp.obj" \
 "CMakeFiles/raylib_game.dir/src/OptionsScreen.cpp.obj" \
-"CMakeFiles/raylib_game.dir/src/PointsHero.cpp.obj" \
 "CMakeFiles/raylib_game.dir/src/RenderUtils.cpp.obj" \
 "CMakeFiles/raylib_game.dir/src/StartScreen.cpp.obj" \
 "CMakeFiles/raylib_game.dir/src/Variables.cpp.obj" \
@@ -275,7 +259,6 @@ raylib_game.exe: CMakeFiles/raylib_game.dir/src/DrawLevel.cpp.obj
 raylib_game.exe: CMakeFiles/raylib_game.dir/src/Level1_Screen1.cpp.obj
 raylib_game.exe: CMakeFiles/raylib_game.dir/src/Level1_Screen2.cpp.obj
 raylib_game.exe: CMakeFiles/raylib_game.dir/src/OptionsScreen.cpp.obj
-raylib_game.exe: CMakeFiles/raylib_game.dir/src/PointsHero.cpp.obj
 raylib_game.exe: CMakeFiles/raylib_game.dir/src/RenderUtils.cpp.obj
 raylib_game.exe: CMakeFiles/raylib_game.dir/src/StartScreen.cpp.obj
 raylib_game.exe: CMakeFiles/raylib_game.dir/src/Variables.cpp.obj
@@ -286,7 +269,7 @@ raylib_game.exe: C:/msys64/mingw64/lib/libraylib.dll.a
 raylib_game.exe: CMakeFiles/raylib_game.dir/linkLibs.rsp
 raylib_game.exe: CMakeFiles/raylib_game.dir/objects1.rsp
 raylib_game.exe: CMakeFiles/raylib_game.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\Users\bruno.richardon\Desktop\Projets\MyGame\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Linking CXX executable raylib_game.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\Users\bruno.richardon\Desktop\Projets\MyGame\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Linking CXX executable raylib_game.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\raylib_game.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

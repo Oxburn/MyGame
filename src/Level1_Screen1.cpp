@@ -88,10 +88,10 @@ void Level1_Screen1() {
 
     BeginTextureMode(GLOBAL_RENDER_TEXTURE);
         ClearBackground(BACKGROUND_COLOR);
+        DrawHero(levelDefinitions);
         for (const auto& levelDefinition : levelDefinitions) {
             DrawLevel(levelDefinition);
         }
-        DrawHero(levelDefinitions);
     EndTextureMode();
 
     DrawRenderTextureToScreen();
