@@ -239,8 +239,9 @@ Vector2 ComputeForces(std::vector<Vector2> proximityData)
     
     // ---- Force de colle (? Transformation des forces de réaction / gravité ?) ----
     
-    bool GLOBAL_HERO_CAN_STICK = true;
     std::vector<Vector2> stickForces;
+    bool GLOBAL_HERO_CAN_STICK = true;
+    float GLOBAL_STICK_DURATION = 3.0f;
     if (GLOBAL_HERO_CAN_STICK)
     {
         float sumX = 0.0f;
@@ -253,26 +254,31 @@ Vector2 ComputeForces(std::vector<Vector2> proximityData)
             sumX += forceX;
             sumY += forceY;
         }
-
-        if (std::abs(sumX) > 1.0f  or sumY > 1.0f)
+        
+        bool canStick;
+        if (std::abs(sumX) > 1.0f or sumY > 0.3f)
         {
-            GLOBAL_START_STICK = true;
-            TraceLog(LOG_NONE, "Doit coller ! %.2f", sumY);
+            canStick = true;
         }
         else
         {
-            GLOBAL_START_STICK = false;
-            TraceLog(LOG_NONE, "Ne doit plus coller !");
+            canStick = false;
+            GLOBAL_START_STICK = GetTime();
+            GLOBAL_STICK_INTENSITY = 1.0f;
         }
         
-        if (GLOBAL_START_STICK)
+        if (canStick)
         {
-            gravityForces.clear();
+            if (GLOBAL_STICK_INTENSITY > 0.0f)
+            {
+                float stickTime = GetTime() - GLOBAL_START_STICK;
 
+                GLOBAL_STICK_INTENSITY -= 0.01f * stickTime;
+                gravityForces.clear();
+            }
             for (const auto& reactionForce : reactionForces)
             {
-                float stickForceY = -reactionForce.y;
-
+                float stickForceY = -GLOBAL_STICK_INTENSITY * reactionForce.y;
                 stickForces.push_back({0.0f, stickForceY});
             }
         }

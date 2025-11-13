@@ -85,8 +85,8 @@ void Window() {
     GLOBAL_HERO_VELOCITY = {0.0f, 0.0f};
     GLOBAL_HERO_ROTATION = 0.0f;
 
-    GLOBAL_GRAVITY_DELAY = 0.0;
-    GLOBAL_START_STICK = false;
+    GLOBAL_STICK_INTENSITY = 1.0f;
+    GLOBAL_START_STICK = GetTime();
     
     // Clic saut
     GLOBAL_JUMP_CLICK_START_TIME = 0.0;

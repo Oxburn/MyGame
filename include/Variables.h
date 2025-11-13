@@ -34,8 +34,9 @@ extern Vector2 GLOBAL_HERO_MOVE;
 extern Vector2 GLOBAL_HERO_VELOCITY;
 extern float GLOBAL_HERO_ROTATION;
 
-extern double GLOBAL_GRAVITY_DELAY;         // Pour pysique colle ??
-extern bool GLOBAL_START_STICK;
+// Physique colle
+extern float GLOBAL_STICK_INTENSITY;         
+extern float GLOBAL_START_STICK;
 
 // Clic saut
 extern double GLOBAL_JUMP_CLICK_START_TIME;
