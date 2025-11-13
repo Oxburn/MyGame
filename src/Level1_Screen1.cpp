@@ -11,7 +11,7 @@ void Level1_Screen1() {
 
     // ---- Points du niveau ----
 
-    LEVEL_PART_DEFINITION moss1Pts = {
+    LEVEL_PART_DEFINITION mossWall1 = {
         {
             {-b, -b},
             {-b, 200 + b},
@@ -26,7 +26,7 @@ void Level1_Screen1() {
         MOSS_THICKNESS, MOSS_COLOR, DIRT_COLOR
     };
 
-    LEVEL_PART_DEFINITION moss2Pts = {
+    LEVEL_PART_DEFINITION mossWall2 = {
         {
             {100 + b, -b},
             {60, -b},
@@ -38,8 +38,7 @@ void Level1_Screen1() {
         MOSS_THICKNESS, MOSS_COLOR, DIRT_COLOR
     };
 
-    /// A Supprimer lorsque physique héros OK ///
-    LEVEL_PART_DEFINITION tempMossPts = {
+    LEVEL_PART_DEFINITION mossPlatform = {
         {
             {50, 60},
             {50, 62},
@@ -49,12 +48,20 @@ void Level1_Screen1() {
         },
         MOSS_THICKNESS, MOSS_COLOR, MOSS_COLOR
     };
-    /// A Supprimer lorsque physique héros OK ///
+
+    LEVEL_PART_DEFINITION aluminiumDoor = {
+        {
+            {43, 0},
+            {62, 0}
+        },
+        ALUMINIUM_THICKNESS, ALUMINIUM_COLOR, ALUMINIUM_COLOR
+    };
     
     std::vector<LEVEL_PART_DEFINITION> levelPartDefinitions = {
-        moss1Pts,
-        moss2Pts,
-        tempMossPts
+        mossWall1,
+        mossWall2,
+        mossPlatform,
+        aluminiumDoor
     };
 
 

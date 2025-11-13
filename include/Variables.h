@@ -35,6 +35,7 @@ extern Vector2 GLOBAL_HERO_VELOCITY;
 extern float GLOBAL_HERO_ROTATION;
 
 // Physique colle
+extern float GLOBAL_STICK_DURATION;
 extern float GLOBAL_STICK_INTENSITY;         
 extern float GLOBAL_START_STICK;
 
@@ -45,7 +46,7 @@ extern bool GLOBAL_JUMP_IS_RELEASED;
 extern double GLOBAL_JUMP_MAX_TIME;
 
 // Qualité
-constexpr float WINDOW_BASE_WIDTH_RATIO = /*0.5*/ 0.5f;
+constexpr float WINDOW_BASE_WIDTH_RATIO = /*0.5*/ 0.9f;
 constexpr float WINDOW_RATIO = 16.0f / 9.0f;
 constexpr const  char* WINDOW_NAME = "MyGame";
 constexpr int WINDOW_FRAMERATE = 60;
@@ -59,11 +60,13 @@ constexpr Color INACTIVE_COLOR = {128, 128, 128, 255};
 constexpr Color MOSS_COLOR = {151, 162, 70, 255};
 constexpr Color GRASS_COLOR = {91, 147, 4, 255};
 constexpr Color DIRT_COLOR = {95, 69, 48, 255};
+constexpr Color ALUMINIUM_COLOR = {192, 192, 192, 255};
 
 // Epaisseurs
 constexpr float HERO_THICKNESS = 4.0f;
-constexpr float MOSS_THICKNESS = 6.0f;
+constexpr float MOSS_THICKNESS = 4.0f;
 constexpr float GRASS_THICKNESS = 2.0f;
+constexpr float ALUMINIUM_THICKNESS = 6.0f;
 
 // Texte
 constexpr const char* CURSOR = u8"➤";

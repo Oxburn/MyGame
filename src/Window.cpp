@@ -79,14 +79,16 @@ void Window() {
     GLOBAL_CURRENT_SCREEN = SCREEN_START;
     GLOBAL_HERO_PREVIOUS_TIME = GetTime();
     GLOBAL_HERO_RADIUS = 2.0f;
-    //GLOBAL_HERO_POS = {52, 0};
+    //GLOBAL_HERO_POS = {53.0f, 1.0f};
     GLOBAL_HERO_POS = {20.0f, 71.0f};
     GLOBAL_HERO_MOVE = {0.0f, 0.0f};
     GLOBAL_HERO_VELOCITY = {0.0f, 0.0f};
     GLOBAL_HERO_ROTATION = 0.0f;
 
+    // Colle
+    GLOBAL_STICK_DURATION = 0.001f;           // Ne pas mettre 0 !
     GLOBAL_STICK_INTENSITY = 1.0f;
-    GLOBAL_START_STICK = GetTime();
+    GLOBAL_START_STICK = GetTime() + 2.0f;  // +2 pour le temps de chargement entre niveau
     
     // Clic saut
     GLOBAL_JUMP_CLICK_START_TIME = 0.0;

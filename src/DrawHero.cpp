@@ -237,50 +237,59 @@ Vector2 ComputeForces(std::vector<Vector2> proximityData)
     gravityForces.push_back(GLOBAL_GRAVITY_FORCE);
     
     
-    // ---- Force de colle (? Transformation des forces de réaction / gravité ?) ----
+    // ---- Force de colle (Contre-forces de réaction et zéro gravité) ----
     
     std::vector<Vector2> stickForces;
-    bool GLOBAL_HERO_CAN_STICK = true;
-    float GLOBAL_STICK_DURATION = 3.0f;
-    if (GLOBAL_HERO_CAN_STICK)
+
+    float sumX = 0.0f;
+    float sumY = 0.0f;
+    for (const auto& reactionForce : reactionForces)
     {
-        float sumX = 0.0f;
-        float sumY = 0.0f;
+        float forceX = reactionForce.x;
+        float forceY = reactionForce.y;
+
+        sumX += forceX;
+        sumY += forceY;
+    }
+    
+    bool canStick;
+    //TraceLog(LOG_NONE, "ReactionX : %.2f", std::abs(sumX));
+    //TraceLog(LOG_NONE, "ReactionY : %.2f", sumY);
+    //TraceLog(LOG_NONE, "abs(X) + Y : %.2f", std::abs(sumX) + sumY);
+
+    //if ((std::abs(sumX) > 1.0f or sumY > 1.0f))
+    if ((std::abs(sumX) < 0.1f and sumY > 1.0f) or //Plafond
+        (std::abs(sumX) > 1.0f and sumY < 0.1f) or //Mur
+        (std::abs(sumX) > 0.2f and sumY > 0.2f)) //Coin plafond
+    {
+        canStick = true;
+    }
+    else
+    {
+        canStick = false;
+        GLOBAL_START_STICK = GetTime();
+        GLOBAL_STICK_INTENSITY = 1.0f;
+    }
+    
+    if (canStick)
+    {
+        if (GLOBAL_STICK_INTENSITY > 0.0f)
+        {
+            float stickTime = GetTime() - GLOBAL_START_STICK;
+            stickTime = std::max(stickTime, 0.0f);
+            if (stickTime <= GLOBAL_STICK_DURATION)
+            {
+                //TraceLog(LOG_NONE, "Doit coller %.2f", stickTime);
+                float decreasing = stickTime / GLOBAL_STICK_DURATION;
+                GLOBAL_STICK_INTENSITY -= GLOBAL_STICK_INTENSITY * decreasing;
+                gravityForces.clear();
+                reactionForces.clear();
+            }
+        }
         for (const auto& reactionForce : reactionForces)
         {
-            float forceX = reactionForce.x;
-            float forceY = reactionForce.y;
-
-            sumX += forceX;
-            sumY += forceY;
-        }
-        
-        bool canStick;
-        if (std::abs(sumX) > 1.0f or sumY > 0.3f)
-        {
-            canStick = true;
-        }
-        else
-        {
-            canStick = false;
-            GLOBAL_START_STICK = GetTime();
-            GLOBAL_STICK_INTENSITY = 1.0f;
-        }
-        
-        if (canStick)
-        {
-            if (GLOBAL_STICK_INTENSITY > 0.0f)
-            {
-                float stickTime = GetTime() - GLOBAL_START_STICK;
-
-                GLOBAL_STICK_INTENSITY -= 0.01f * stickTime;
-                gravityForces.clear();
-            }
-            for (const auto& reactionForce : reactionForces)
-            {
-                float stickForceY = -GLOBAL_STICK_INTENSITY * reactionForce.y;
-                stickForces.push_back({0.0f, stickForceY});
-            }
+            float stickForceY = GLOBAL_STICK_INTENSITY * reactionForce.y;
+            stickForces.push_back({0.0f, stickForceY});
         }
     }
 
@@ -455,9 +464,9 @@ void DrawHero(std::vector<LEVEL_DEFINITION>& levelDefinitions)
         };
 
         float t = (float)i / (float)(proximityData.size() - 1); // de 0.0 à 1.0
-        unsigned char r = (unsigned char)(0 + t * 50);   // de 0 à 50
-        unsigned char g = (unsigned char)(0 + t * 100);  // de 0 à 100
-        unsigned char b = (unsigned char)(150 + t * 105); // de 150 à 255
+        unsigned char r = (unsigned char)(80 + t * 60);   // de 80 à 140
+        unsigned char g = (unsigned char)(120 + t * 80);  // de 120 à 200
+        unsigned char b = (unsigned char)(200 + t * 55); // de 150 à 255
         Color heroColor = {r, g, b, 255};
 
         DrawLineEx(startPt, endPt, 2.0f, heroColor);
