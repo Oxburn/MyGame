@@ -283,13 +283,24 @@ Vector2 ComputeForces(std::vector<Vector2> proximityData)
                 float decreasing = stickTime / GLOBAL_STICK_DURATION;
                 GLOBAL_STICK_INTENSITY -= GLOBAL_STICK_INTENSITY * decreasing;
                 gravityForces.clear();
-                reactionForces.clear();
+                
+                std::vector<Vector2> newForces;
+                for (const auto& reactionForce : reactionForces)
+                {
+                    float forceX = reactionForce.x;
+                    float forceY = reactionForce.y;
+
+                    float stickForceY = GLOBAL_STICK_INTENSITY * forceY;
+
+                    stickForces.push_back( {0.0f, stickForceY} );
+                    newForces.push_back({
+                        forceX * 0.15f,
+                        forceY * 0.05f
+                    });
+                }
+
+                reactionForces = newForces;
             }
-        }
-        for (const auto& reactionForce : reactionForces)
-        {
-            float stickForceY = GLOBAL_STICK_INTENSITY * reactionForce.y;
-            stickForces.push_back({0.0f, stickForceY});
         }
     }
 

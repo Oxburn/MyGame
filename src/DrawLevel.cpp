@@ -181,5 +181,4 @@ void DrawLevel(LEVEL_DEFINITION levelDefinition)
 
         DrawTriangle(A, B, C, surfaceColor);
     }
-    //DrawSurface(boundaryPoints, parallelCurve, surfaceColor);
 }
