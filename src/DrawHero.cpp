@@ -12,7 +12,7 @@
 float GLOBAL_MAX_SPEED = 3.0f;
 float GLOBAL_HERO_ACCELERATION = 0.5f;
 float GLOBAL_HERO_BOUNCE = 1.0f;      // Ecrasement du héros (0.5 -> Très écrasé / 5.0f -> Peu écrasé)
-Vector2 GLOBAL_GRAVITY_FORCE = {0.0f, 7.0f};
+Vector2 GLOBAL_GRAVITY_FORCE = {0.0f, 9.8f};
 float GLOBAL_JUMP_POWER = 15.0f; // 8.0f (un peu plus que la gravité) -> Saut minimal
 Vector2 NO_GLITCH_POINT = {0, 0}; //
 bool GLOBAL_HERO_GLITCHED = false;
@@ -245,57 +245,58 @@ Vector2 ComputeForces(std::vector<Vector2> proximityData)
     float sumY = 0.0f;
     for (const auto& reactionForce : reactionForces)
     {
-        float forceX = reactionForce.x;
-        float forceY = reactionForce.y;
-
-        sumX += forceX;
-        sumY += forceY;
+        sumX += reactionForce.x;
+        sumY += reactionForce.y;
     }
-    
-    bool canStick;
-    //TraceLog(LOG_NONE, "ReactionX : %.2f", std::abs(sumX));
-    //TraceLog(LOG_NONE, "ReactionY : %.2f", sumY);
-    //TraceLog(LOG_NONE, "abs(X) + Y : %.2f", std::abs(sumX) + sumY);
 
-    //if ((std::abs(sumX) > 1.0f or sumY > 1.0f))
-    if ((std::abs(sumX) < 0.1f and sumY > 1.0f) or //Plafond
-        (std::abs(sumX) > 1.0f and sumY < 0.1f) or //Mur
-        (std::abs(sumX) > 0.2f and sumY > 0.2f)) //Coin plafond
+    bool cooldownOver = (GetTime() - GLOBAL_LAST_UNSTICK_TIME) >= GLOBAL_STICK_COOLDOWN;
+    bool canStick = false;
+    bool stickCondition =
+        (std::abs(sumX) < 0.1f && sumY > 1.0f) ||  // Plafond
+        (std::abs(sumX) > 1.0f && sumY < 0.1f) ||  // Mur
+        (std::abs(sumX) > 0.1f && sumY > 0.1f);    // Coin plafond
+
+    if (cooldownOver && stickCondition)
     {
         canStick = true;
     }
-    else
+
+    if (GLOBAL_WAS_STICKING && !canStick)
     {
-        canStick = false;
+        GLOBAL_LAST_UNSTICK_TIME = GetTime();
         GLOBAL_START_STICK = GetTime();
         GLOBAL_STICK_INTENSITY = 1.0f;
     }
-    
+
+    GLOBAL_WAS_STICKING = canStick;
+
     if (canStick)
     {
-        if (GLOBAL_STICK_INTENSITY > 0.0f)
+        if (GLOBAL_STICK_INTENSITY > 0.0f && GLOBAL_STICK_DURATION > 0.0f)
         {
             float stickTime = GetTime() - GLOBAL_START_STICK;
             stickTime = std::max(stickTime, 0.0f);
+
             if (stickTime <= GLOBAL_STICK_DURATION)
             {
-                //TraceLog(LOG_NONE, "Doit coller %.2f", stickTime);
                 float decreasing = stickTime / GLOBAL_STICK_DURATION;
                 GLOBAL_STICK_INTENSITY -= GLOBAL_STICK_INTENSITY * decreasing;
+
                 gravityForces.clear();
-                
                 std::vector<Vector2> newForces;
                 for (const auto& reactionForce : reactionForces)
                 {
-                    float forceX = reactionForce.x;
-                    float forceY = reactionForce.y;
+                    float stickForceY = GLOBAL_STICK_INTENSITY * reactionForce.y;
+                    stickForces.push_back({0.0f, stickForceY});
 
-                    float stickForceY = GLOBAL_STICK_INTENSITY * forceY;
+                    float coef = 0.05f;
+                    if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_UP)) {
+                        coef = 0.2f;
+                    }
 
-                    stickForces.push_back( {0.0f, stickForceY} );
                     newForces.push_back({
-                        forceX * 0.15f,
-                        forceY * 0.05f
+                        reactionForce.x * coef,
+                        reactionForce.y * coef
                     });
                 }
 
@@ -325,7 +326,7 @@ Vector2 ComputeForces(std::vector<Vector2> proximityData)
     {
         GLOBAL_HERO_MOVE.y += GLOBAL_HERO_ACCELERATION;
     }
-    if (IsKeyPressed(KEY_UP) && GLOBAL_HERO_MOVE.y > -GLOBAL_MAX_SPEED)
+    if (IsKeyDown(KEY_UP) && GLOBAL_HERO_MOVE.y > -GLOBAL_MAX_SPEED && !reactionForces.empty())
     {
         GLOBAL_HERO_MOVE.y -= GLOBAL_HERO_ACCELERATION;
     }
@@ -459,7 +460,6 @@ void DrawHero(std::vector<LEVEL_DEFINITION>& levelDefinitions)
             {
                 sideContact = -1;
             }
-
         }
 
         startPtX = GLOBAL_HERO_POS.x + (startPtX - GLOBAL_HERO_POS.x) / WINDOW_RATIO;

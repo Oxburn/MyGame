@@ -77,18 +77,18 @@ void Window() {
     GLOBAL_SOUND_CURSOR_POS = 100;
     GLOBAL_MUSIC_CURSOR_POS = 100;
     GLOBAL_CURRENT_SCREEN = SCREEN_START;
-    GLOBAL_HERO_PREVIOUS_TIME = GetTime();
     GLOBAL_HERO_RADIUS = 2.0f;
     GLOBAL_HERO_POS = {53.0f, 1.0f};
-    //GLOBAL_HERO_POS = {20.0f, 71.0f};
     GLOBAL_HERO_MOVE = {0.0f, 0.0f};
     GLOBAL_HERO_VELOCITY = {0.0f, 0.0f};
     GLOBAL_HERO_ROTATION = 0.0f;
 
     // Colle
-    GLOBAL_STICK_DURATION = 0.001f /*10.0f*/;           // Ne pas mettre 0 !
-    GLOBAL_STICK_INTENSITY = 1.0f;
-    GLOBAL_START_STICK = GetTime() + 2.0f;  // +2 pour le temps de chargement entre niveau
+    GLOBAL_STICK_DURATION = 10.0f;
+    GLOBAL_STICK_INTENSITY = 0.001f;
+    GLOBAL_START_STICK = 1e6;
+    GLOBAL_LAST_UNSTICK_TIME = -GLOBAL_STICK_COOLDOWN; // Pour coller à l'initialisation
+    GLOBAL_WAS_STICKING = false;
     
     // Clic saut
     GLOBAL_JUMP_CLICK_START_TIME = 0.0;
@@ -96,6 +96,8 @@ void Window() {
     GLOBAL_JUMP_IS_RELEASED = true;
     GLOBAL_JUMP_MAX_TIME = 0.5; // Durée max de saut en seconde
 
+    // Ecran
+    GLOBAL_SCREEN_POS = GLOBAL_HERO_POS;
 
     while (!WindowShouldClose())
     {

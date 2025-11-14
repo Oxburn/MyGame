@@ -5,7 +5,6 @@
 #include "DrawHero.h"
 #include <vector>
 
-float b = 10; // Dépassement des bords
 
 void Level1_Screen1() {
 
@@ -13,27 +12,27 @@ void Level1_Screen1() {
 
     LEVEL_PART_DEFINITION mossWall1 = {
         {
-            {-b, -b},
-            {-b, 200 + b},
-            {40, 200 + b},
+            {-GLOBAL_BORDER_BEYOND, -GLOBAL_BORDER_BEYOND},
+            {-GLOBAL_BORDER_BEYOND, 200 + GLOBAL_BORDER_BEYOND},
+            {40, 200 + GLOBAL_BORDER_BEYOND},
             {40, 90},
             {10, 90},
             {10, 70},
             {45, 70},
-            {45, -b},
-            {-b, -b}
+            {45, -GLOBAL_BORDER_BEYOND},
+            {-GLOBAL_BORDER_BEYOND, -GLOBAL_BORDER_BEYOND}
         },
         MOSS_THICKNESS, MOSS_COLOR, DIRT_COLOR
     };
 
     LEVEL_PART_DEFINITION mossWall2 = {
         {
-            {100 + b, -b},
-            {60, -b},
+            {100 + GLOBAL_BORDER_BEYOND, -GLOBAL_BORDER_BEYOND},
+            {60, -GLOBAL_BORDER_BEYOND},
             {60, 170},
-            {90, 200 + b},
-            {100 + b, 200 + b},
-            {100 + b, b}
+            {90, 200 + GLOBAL_BORDER_BEYOND},
+            {100 + GLOBAL_BORDER_BEYOND, 200 + GLOBAL_BORDER_BEYOND},
+            {100 + GLOBAL_BORDER_BEYOND, GLOBAL_BORDER_BEYOND}
         },
         MOSS_THICKNESS, MOSS_COLOR, DIRT_COLOR
     };
@@ -65,11 +64,16 @@ void Level1_Screen1() {
     };
 
 
+    // ---- Repositionnement des points du niveau selon la position du héros ----
+
+    std::vector<LEVEL_PART_DEFINITION> positionedLevelPartDefinitions = BoundaryPointsPositioned(levelPartDefinitions);
+
+
     // ---- Ajout des courbes parallèles ----
 
     std::vector<LEVEL_DEFINITION> levelDefinitions;
 
-    for (const auto& levelPartDefinition : levelPartDefinitions)
+    for (const auto& levelPartDefinition : positionedLevelPartDefinitions)
     {
         std::vector<Vector2> boundaryPoints = levelPartDefinition.boundaryPoints;
         float boundaryThickness = levelPartDefinition.boundaryThickness;
