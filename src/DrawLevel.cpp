@@ -6,6 +6,8 @@
 #include <cmath>
 
 
+float BORDER_ZONE = 10.0f;
+
 std::vector<LEVEL_PART_DEFINITION> BoundaryPointsPositioned(const std::vector<LEVEL_PART_DEFINITION> levelPartDefinitions)
 {
     // ---- Bords du niveau ----
@@ -39,23 +41,21 @@ std::vector<LEVEL_PART_DEFINITION> BoundaryPointsPositioned(const std::vector<LE
 
     // ---- Recalage intérieur écran autour du héros ----
 
-    float b = 15.0f;
-
-    if (GLOBAL_SCREEN_POS.x - 50.0f + b > GLOBAL_HERO_POS.x)
+    if (GLOBAL_SCREEN_POS.x - 50.0f + BORDER_ZONE > GLOBAL_HERO_POS.x)
     {
-        GLOBAL_SCREEN_POS.x = GLOBAL_HERO_POS.x + 50.0f - b;
+        GLOBAL_SCREEN_POS.x = GLOBAL_HERO_POS.x + 50.0f - BORDER_ZONE;
     }
-    if (GLOBAL_SCREEN_POS.x + 50.0f - b < GLOBAL_HERO_POS.x)
+    if (GLOBAL_SCREEN_POS.x + 50.0f - BORDER_ZONE < GLOBAL_HERO_POS.x)
     {
-        GLOBAL_SCREEN_POS.x = GLOBAL_HERO_POS.x - 50.0f + b;
+        GLOBAL_SCREEN_POS.x = GLOBAL_HERO_POS.x - 50.0f + BORDER_ZONE;
     }
-    if (GLOBAL_SCREEN_POS.y - 50.0f + b > GLOBAL_HERO_POS.y)
+    if (GLOBAL_SCREEN_POS.y - 50.0f + BORDER_ZONE > GLOBAL_HERO_POS.y)
     {
-        GLOBAL_SCREEN_POS.y = GLOBAL_HERO_POS.y + 50.0f - b;
+        GLOBAL_SCREEN_POS.y = GLOBAL_HERO_POS.y + 50.0f - BORDER_ZONE;
     }
-    if (GLOBAL_SCREEN_POS.y + 50.0f - b < GLOBAL_HERO_POS.y)
+    if (GLOBAL_SCREEN_POS.y + 50.0f - BORDER_ZONE < GLOBAL_HERO_POS.y)
     {
-        GLOBAL_SCREEN_POS.y = GLOBAL_HERO_POS.y - 50.0f + b;
+        GLOBAL_SCREEN_POS.y = GLOBAL_HERO_POS.y - 50.0f + BORDER_ZONE;
     }
 
 
@@ -63,30 +63,29 @@ std::vector<LEVEL_PART_DEFINITION> BoundaryPointsPositioned(const std::vector<LE
 
     if (GLOBAL_SCREEN_POS.x - 50.0f < leftLevelPos)
     {
-        GLOBAL_SCREEN_POS.x += leftLevelPos - GLOBAL_SCREEN_POS.x + 50.0f;
+        GLOBAL_SCREEN_POS.x = leftLevelPos + 50.0f;
     }
     if (GLOBAL_SCREEN_POS.x + 50.0f > rightLevelPos)
     {
-        GLOBAL_SCREEN_POS.x -= GLOBAL_SCREEN_POS.x + 50.0f - rightLevelPos;
+        GLOBAL_SCREEN_POS.x = rightLevelPos - 50.0f;
     }
     if (GLOBAL_SCREEN_POS.y - 50.0f < topLevelPos)
     {
-        GLOBAL_SCREEN_POS.y += topLevelPos - GLOBAL_SCREEN_POS.y + 50.0f;
+        GLOBAL_SCREEN_POS.y = topLevelPos + 50.0f;
     }
     if (GLOBAL_SCREEN_POS.y + 50.0f > bottomLevelPos)
     {
-        GLOBAL_SCREEN_POS.y -= GLOBAL_SCREEN_POS.y + 50.0f - bottomLevelPos;
+        GLOBAL_SCREEN_POS.y = bottomLevelPos - 50.0f;
     }
 
-    //TraceLog(LOG_NONE, "%.2f, %.2f | %.2f, %.2f", GLOBAL_SCREEN_POS.x, GLOBAL_SCREEN_POS.y, GLOBAL_HERO_POS.x, GLOBAL_HERO_POS.y);
-    // ---- Repositionnement des points à l'écran ----
     
-    //float offsetX = GLOBAL_SCREEN_POS.x - 50.0f;
-    //float offsetY = GLOBAL_SCREEN_POS.y - 50.0f;
-    //TraceLog(LOG_NONE, "%.2f | %.2f", offsetX, offsetY);
-    std::vector<LEVEL_PART_DEFINITION> positionedLevelPartDefinitions;
+    // ---- Repositionnement des points à l'écran ----
 
-    /*for (const auto& levelPartDefinition : levelPartDefinitions)
+    std::vector<LEVEL_PART_DEFINITION> positionedLevelPartDefinitions;
+    float offsetX = (float)(GLOBAL_SCREEN_POS.x - 50.0f);
+    float offsetY = (float)(GLOBAL_SCREEN_POS.y - 50.0f);
+
+    for (const auto& levelPartDefinition : levelPartDefinitions)
     {
         std::vector<Vector2> boundaryPoints = levelPartDefinition.boundaryPoints;
         float boundaryThickness = levelPartDefinition.boundaryThickness;
@@ -108,7 +107,7 @@ std::vector<LEVEL_PART_DEFINITION> BoundaryPointsPositioned(const std::vector<LE
             boundaryColor,
             surfaceColor
         });
-    }*/
+    }
 
     if (positionedLevelPartDefinitions.empty())
     {
@@ -245,12 +244,12 @@ void DrawLevel(LEVEL_DEFINITION levelDefinition)
     for (size_t i = 0; i < boundaryPoints.size() - 1; i++)
     {
         Vector2 A = {
-            (float)(boundaryPoints[i].x * GLOBAL_RENDER_WIDTH / 100),
-            (float)(boundaryPoints[i].y * GLOBAL_RENDER_HEIGHT / 100),
+            (float)(boundaryPoints[i].x * GLOBAL_RENDER_WIDTH / 100.0f),
+            (float)(boundaryPoints[i].y * GLOBAL_RENDER_HEIGHT / 100.0f),
         };
         Vector2 B = {
-            (float)(boundaryPoints[i + 1].x * GLOBAL_RENDER_WIDTH / 100),
-            (float)(boundaryPoints[i + 1].y * GLOBAL_RENDER_HEIGHT / 100),
+            (float)(boundaryPoints[i + 1].x * GLOBAL_RENDER_WIDTH / 100.0f),
+            (float)(boundaryPoints[i + 1].y * GLOBAL_RENDER_HEIGHT / 100.0f),
         };
 
         DrawLineEx(A, B, boundaryThickness, boundaryColor);
@@ -297,22 +296,21 @@ void DrawLevel(LEVEL_DEFINITION levelDefinition)
 
     // ---- Contour de l'écran (debug?) ----
 
-    float b = 15.0f;
     Vector2 A = {
-        (float)(GLOBAL_SCREEN_POS.x - 50.0f + b) * GLOBAL_RENDER_WIDTH / 100,
-        (float)(GLOBAL_SCREEN_POS.y - 50.0f + b) * GLOBAL_RENDER_HEIGHT / 100
+        (float)(GLOBAL_SCREEN_POS.x - 50.0f + BORDER_ZONE) * GLOBAL_RENDER_WIDTH / 100.0f,
+        (float)(GLOBAL_SCREEN_POS.y - 50.0f + BORDER_ZONE) * GLOBAL_RENDER_HEIGHT / 100.0f
     };
     Vector2 B = {
-        (float)(GLOBAL_SCREEN_POS.x + 50.0f - b) * GLOBAL_RENDER_WIDTH / 100,
-        (float)(GLOBAL_SCREEN_POS.y - 50.0f + b) * GLOBAL_RENDER_HEIGHT / 100
+        (float)(GLOBAL_SCREEN_POS.x + 50.0f - BORDER_ZONE) * GLOBAL_RENDER_WIDTH / 100.0f,
+        (float)(GLOBAL_SCREEN_POS.y - 50.0f + BORDER_ZONE) * GLOBAL_RENDER_HEIGHT / 100.0f
     };
     Vector2 C = {
-        (float)(GLOBAL_SCREEN_POS.x + 50.0f - b) * GLOBAL_RENDER_WIDTH / 100,
-        (float)(GLOBAL_SCREEN_POS.y + 50.0f - b) * GLOBAL_RENDER_HEIGHT / 100
+        (float)(GLOBAL_SCREEN_POS.x + 50.0f - BORDER_ZONE) * GLOBAL_RENDER_WIDTH / 100.0f,
+        (float)(GLOBAL_SCREEN_POS.y + 50.0f - BORDER_ZONE) * GLOBAL_RENDER_HEIGHT / 100.0f
     };
     Vector2 D = {
-        (float)(GLOBAL_SCREEN_POS.x - 50.0f + b) * GLOBAL_RENDER_WIDTH / 100,
-        (float)(GLOBAL_SCREEN_POS.y + 50.0f - b) * GLOBAL_RENDER_HEIGHT / 100
+        (float)(GLOBAL_SCREEN_POS.x - 50.0f + BORDER_ZONE) * GLOBAL_RENDER_WIDTH / 100.0f,
+        (float)(GLOBAL_SCREEN_POS.y + 50.0f - BORDER_ZONE) * GLOBAL_RENDER_HEIGHT / 100.0f
     };
 
     DrawLineEx(A, B, 5.0f, BLUE);

@@ -63,8 +63,6 @@ void Window() {
 
     // ---- Comportement dynamique de la fenêtre ----
 
-    
-
     bool isFullScreen = false;
     GLOBAL_PAUSE = false;
     GLOBAL_DELAY = 0.0f;
@@ -85,9 +83,9 @@ void Window() {
 
     // Colle
     GLOBAL_STICK_DURATION = 10.0f;
-    GLOBAL_STICK_INTENSITY = 0.001f;
+    GLOBAL_STICK_INTENSITY = 0.0001f;
     GLOBAL_START_STICK = 1e6;
-    GLOBAL_LAST_UNSTICK_TIME = -GLOBAL_STICK_COOLDOWN; // Pour coller à l'initialisation
+    GLOBAL_LAST_UNSTICK_TIME = -GLOBAL_STICK_COOLDOWN;
     GLOBAL_WAS_STICKING = false;
     
     // Clic saut

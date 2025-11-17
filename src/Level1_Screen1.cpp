@@ -6,8 +6,8 @@
 #include <vector>
 
 
-void Level1_Screen1() {
-
+void Level1_Screen1()
+{
     // ---- Points du niveau ----
 
     LEVEL_PART_DEFINITION mossWall1 = {

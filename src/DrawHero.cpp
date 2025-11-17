@@ -12,7 +12,7 @@
 float GLOBAL_MAX_SPEED = 3.0f;
 float GLOBAL_HERO_ACCELERATION = 0.5f;
 float GLOBAL_HERO_BOUNCE = 1.0f;      // Ecrasement du héros (0.5 -> Très écrasé / 5.0f -> Peu écrasé)
-Vector2 GLOBAL_GRAVITY_FORCE = {0.0f, 9.8f};
+Vector2 GLOBAL_GRAVITY_FORCE = {0.0f, 2.8f};
 float GLOBAL_JUMP_POWER = 15.0f; // 8.0f (un peu plus que la gravité) -> Saut minimal
 Vector2 NO_GLITCH_POINT = {0, 0}; //
 bool GLOBAL_HERO_GLITCHED = false;
@@ -501,6 +501,7 @@ void DrawHero(std::vector<LEVEL_DEFINITION>& levelDefinitions)
     // Physique (forces, vitesse)
     GLOBAL_HERO_POS.x += GLOBAL_HERO_VELOCITY.x;
     GLOBAL_HERO_POS.y += GLOBAL_HERO_VELOCITY.y;
+    
 
     // Corriger si pénétration
     GLOBAL_HERO_GLITCHED = false;
